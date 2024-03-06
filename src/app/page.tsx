@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import DynamicBackground from "./ui/dynamic-background";
+import { twMerge } from "tailwind-merge";
 
 interface IClockPointerLocationClassNames {
   bottom: string;
@@ -10,7 +12,8 @@ interface IClockPointerLocationClassNames {
 }
 
 export default function ClockPage() {
-  const [currentTime, setCurrentTime] = useState<Date>();
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [primaryColor, setPrimaryColor] = useState<string>("dark");
   const [clockPointerLocationClassNames, setClockPointerLocationClassNames] =
     useState<IClockPointerLocationClassNames>({
       bottom: "",
@@ -20,11 +23,13 @@ export default function ClockPage() {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // const test = currentTime;
-      // test?.setHours(currentTime.getHours() + 1);
+      const test = currentTime;
+      test?.setHours(currentTime.getHours() + 1);
 
-      const currentTime = new Date();
-      setCurrentTime(currentTime);
+      // const currentTime = new Date();
+      setCurrentTime(test);
+      const primaryColor = getPrimaryColor(test);
+      setPrimaryColor(primaryColor);
 
       const { bottom, left, rotate } =
         getClockPointerPositionClassNames(currentTime);
@@ -86,10 +91,29 @@ export default function ClockPage() {
     };
   };
 
+  const getPrimaryColor = (currentTime: Date) => {
+    const hours = currentTime?.getHours();
+    if (hours >= 18 || hours < 5) {
+      return "white";
+    } else {
+      return "dark";
+    }
+  };
+
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-between px-6 py-24">
-      <div className="h-[90%] relative flex aspect-square">
-        <div className="h-full absolute aspect-square rounded-full border-2 border-solid border-dark"></div>
+    <DynamicBackground currentTime={currentTime}>
+      <div
+        className={twMerge(
+          "h-[90%] relative flex aspect-square",
+          `text-${primaryColor}`
+        )}
+      >
+        <div
+          className={twMerge(
+            "h-full absolute aspect-square rounded-full border-2 border-solid",
+            `border-${primaryColor}`
+          )}
+        ></div>
         <div className="flex flex-col justify-center align-middle self-center text-center w-full">
           <div className="text-7xl font-extralight">O'Clock</div>
           <div className="font-light mt-4">
@@ -97,13 +121,12 @@ export default function ClockPage() {
             <div className="text-xs">{currentTime?.toLocaleDateString()}</div>
           </div>
         </div>
-        <div className="absolute w-full h-full text-[10px] font-light">
+        <div className={"absolute w-full h-full text-[10px] font-light"}>
           <div className="absolute bottom-1/2 left-4">6h</div>
           <div className="absolute top-4 left-1/2">12h</div>
           <div className="absolute bottom-1/2 right-4">18h</div>
           <div className="absolute bottom-4 left-1/2">24h</div>
         </div>
-
         {currentTime && (
           <Image
             src={"pointer.svg"}
@@ -115,6 +138,6 @@ export default function ClockPage() {
           />
         )}
       </div>
-    </main>
+    </DynamicBackground>
   );
 }
