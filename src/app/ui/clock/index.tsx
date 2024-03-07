@@ -8,18 +8,18 @@ interface IClock {
   time: Date;
 }
 export default function Clock({ time }: IClock) {
-  const clockCanvasRef = useRef<HTMLCanvasElement>(null);
+  const baseCanvasRef = useRef<HTMLCanvasElement>(null);
   const pointerCanvasRef = useRef<HTMLCanvasElement>(null);
   const [clockRender, setClockRender] = useState<ClockRender>();
 
   useEffect(() => {
-    const clockCanvas = clockCanvasRef.current;
-    if (!clockCanvas) return;
+    const baseCanvas = baseCanvasRef.current;
+    if (!baseCanvas) return;
 
     const pointerCanvas = pointerCanvasRef.current;
     if (!pointerCanvas) return;
 
-    const clockRender = new ClockRender(clockCanvas, pointerCanvas);
+    const clockRender = new ClockRender(baseCanvas, pointerCanvas);
     clockRender.start();
 
     setClockRender(clockRender);
@@ -36,7 +36,7 @@ export default function Clock({ time }: IClock) {
       <canvas
         key={"clock-canvas"}
         className="absolute z-0"
-        ref={clockCanvasRef}
+        ref={baseCanvasRef}
         width={2000}
         height={2000}
       ></canvas>

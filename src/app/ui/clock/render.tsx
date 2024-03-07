@@ -1,7 +1,7 @@
 class ClockRender {
   canvasMiddlePoint: number = 0;
   circleRadius: number = 0;
-  clockCtx: CanvasRenderingContext2D | null = null;
+  baseCtx: CanvasRenderingContext2D | null = null;
   pointerCtx: CanvasRenderingContext2D | null = null;
 
   constructor(
@@ -9,12 +9,12 @@ class ClockRender {
     pointerCanvas: HTMLCanvasElement
   ) {
     // CONFIGURE CLOCK CANVAS
-    const clockCtx = clockCanvas.getContext("2d");
-    if (!clockCtx) return;
+    const baseCtx = clockCanvas.getContext("2d");
+    if (!baseCtx) return;
 
     const rescaledClockCanvasContext = this.rescaleCanvasToFitOnScreen(
       clockCanvas,
-      clockCtx
+      baseCtx
     );
     const styledClockCanvasContext = this.setContextStyles(
       rescaledClockCanvasContext,
@@ -22,7 +22,7 @@ class ClockRender {
       8,
       { color: "black", blur: 3 }
     );
-    this.clockCtx = styledClockCanvasContext;
+    this.baseCtx = styledClockCanvasContext;
 
     const { width } = styledClockCanvasContext.canvas;
     this.canvasMiddlePoint = width / 2;
@@ -49,8 +49,8 @@ class ClockRender {
   }
 
   start() {
-    if (this.clockCtx) {
-      this.renderBase(this.clockCtx);
+    if (this.baseCtx) {
+      this.renderBase(this.baseCtx);
     }
   }
 
@@ -110,18 +110,18 @@ class ClockRender {
     return ctx;
   }
 
-  renderBase(clockCtx: CanvasRenderingContext2D) {
-    clockCtx.beginPath();
-    clockCtx.arc(
+  renderBase(baseCtx: CanvasRenderingContext2D) {
+    baseCtx.beginPath();
+    baseCtx.arc(
       this.canvasMiddlePoint,
       this.canvasMiddlePoint,
       this.circleRadius,
       0,
       2 * Math.PI
     );
-    clockCtx.stroke();
-    clockCtx.closePath();
-    clockCtx.save();
+    baseCtx.stroke();
+    baseCtx.closePath();
+    baseCtx.save();
   }
 
   renderClockPointer(
