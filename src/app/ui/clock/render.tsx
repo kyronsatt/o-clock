@@ -135,6 +135,25 @@ class ClockRender {
     ctx.stroke();
     ctx.closePath();
     ctx.save();
+
+    this._renderBaseTimesLabels(ctx);
+  }
+
+  _renderBaseTimesLabels(ctx: CanvasRenderingContext2D) {
+    const circleDiameter = this._circleRadius * 2;
+
+    ctx.beginPath();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#2E2E2E80";
+    ctx.font = "bold 10px Arial";
+
+    ctx.fillText("6h", 25, this._circleRadius + 10);
+    ctx.fillText("12h", this._circleRadius, 30);
+    ctx.fillText("18h", circleDiameter - 25, this._circleRadius + 10);
+    ctx.fillText("0h", this._circleRadius, circleDiameter - 5);
+    ctx.closePath();
+    ctx.save();
   }
 
   _renderClockPointer(

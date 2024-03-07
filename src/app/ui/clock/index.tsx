@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import ClockRender from "./render";
+import ClockContent from "./content";
 
 interface IClock {
   time: Date;
@@ -34,7 +35,7 @@ export default function Clock({ time }: IClock) {
   return (
     <div className="flex relative w-full h-full justify-center align-center items-center">
       <canvas
-        key={"clock-canvas"}
+        key={"base-canvas"}
         className="absolute z-0"
         ref={baseCanvasRef}
         width={2000}
@@ -47,6 +48,7 @@ export default function Clock({ time }: IClock) {
         width={2000}
         height={2000}
       ></canvas>
+      <ClockContent time={time} />
     </div>
   );
 }
