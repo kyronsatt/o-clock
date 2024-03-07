@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ClockRender from "./render";
 
@@ -8,22 +8,45 @@ interface IClock {
   time: Date;
 }
 export default function Clock({ time }: IClock) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const clockCanvasRef = useRef<HTMLCanvasElement>(null);
+  const pointerCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [clockRender, setClockRender] = useState<ClockRender>();
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const clockCanvas = clockCanvasRef.current;
+    if (!clockCanvas) return;
 
-    const clockRender = new ClockRender(canvas);
-    clockRender.render();
+    const pointerCanvas = pointerCanvasRef.current;
+    if (!pointerCanvas) return;
+
+    const clockRender = new ClockRender(clockCanvas, pointerCanvas);
+    clockRender.start();
+
+    setClockRender(clockRender);
+  }, []);
+
+  useEffect(() => {
+    if (clockRender) {
+      clockRender.updatePointer(time);
+    }
   }, [time]);
 
   return (
-    <canvas
-      // className="border-solid border-dark border-2"
-      ref={canvasRef}
-      width={10000}
-      height={10000}
-    ></canvas>
+    <div className="flex relative w-full h-full justify-center align-center items-center">
+      <canvas
+        key={"clock-canvas"}
+        className="absolute z-0"
+        ref={clockCanvasRef}
+        width={2000}
+        height={2000}
+      ></canvas>
+      <canvas
+        key={"pointer-canvas"}
+        className="absolute z-10"
+        ref={pointerCanvasRef}
+        width={2000}
+        height={2000}
+      ></canvas>
+    </div>
   );
 }
