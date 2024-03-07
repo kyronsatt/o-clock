@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import DynamicBackground from "./ui/dynamic-background";
+import { twMerge } from "tailwind-merge";
 
 interface IClockPointerLocationClassNames {
   bottom: string;
@@ -10,7 +12,8 @@ interface IClockPointerLocationClassNames {
 }
 
 export default function ClockPage() {
-  const [currentTime, setCurrentTime] = useState<Date>();
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [primaryColor, setPrimaryColor] = useState<string>();
   const [clockPointerLocationClassNames, setClockPointerLocationClassNames] =
     useState<IClockPointerLocationClassNames>({
       bottom: "",
@@ -20,11 +23,13 @@ export default function ClockPage() {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // const test = currentTime;
-      // test?.setHours(currentTime.getHours() + 1);
+      const test = currentTime;
+      test?.setHours(currentTime.getHours() + 1);
 
-      const currentTime = new Date();
-      setCurrentTime(currentTime);
+      // const currentTime = new Date();
+      setCurrentTime(test);
+      const primaryColor = getPrimaryColor(test);
+      setPrimaryColor(primaryColor);
 
       const { bottom, left, rotate } =
         getClockPointerPositionClassNames(currentTime);
@@ -65,9 +70,16 @@ export default function ClockPage() {
     // Convert x and y coordinates to percentages
     let xPercentage = (1 - x / (2 * radius)) * 100;
     let yPercentage = (1 - y / (2 * radius)) * 100;
-    if (angle <= 130) {
+
+    if (angle <= 90 || angle >= 340) {
+      xPercentage -= 1.5;
+      yPercentage -= 1.5;
+    } else if (angle <= 130) {
+      xPercentage -= 2;
+      yPercentage -= 2.5;
+    } else if (angle <= 280) {
       xPercentage -= 1.8;
-      yPercentage -= 1.8;
+      yPercentage -= 1.5;
     } else {
       xPercentage -= 2;
       yPercentage -= 2;
@@ -86,10 +98,25 @@ export default function ClockPage() {
     };
   };
 
+  const getPrimaryColor = (currentTime: Date) => {
+    const hours = currentTime?.getHours();
+    if (hours >= 18 || hours < 5) {
+      return "#FFFFFF";
+    } else {
+      return "#2E2E2E";
+    }
+  };
+
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-between px-6 py-24">
-      <div className="h-[90%] relative flex aspect-square">
-        <div className="h-full absolute aspect-square rounded-full border-2 border-solid border-dark"></div>
+    <DynamicBackground currentTime={currentTime}>
+      <div
+        className="h-[90%] relative flex aspect-square"
+        style={{ color: primaryColor }}
+      >
+        <div
+          className="h-full absolute aspect-square rounded-full border-2 border-solid"
+          style={{ borderColor: primaryColor }}
+        ></div>
         <div className="flex flex-col justify-center align-middle self-center text-center w-full">
           <div className="text-7xl font-extralight">O'Clock</div>
           <div className="font-light mt-4">
@@ -97,24 +124,29 @@ export default function ClockPage() {
             <div className="text-xs">{currentTime?.toLocaleDateString()}</div>
           </div>
         </div>
-        <div className="absolute w-full h-full text-[10px] font-light">
+        <div className={"absolute w-full h-full text-[10px] font-light"}>
           <div className="absolute bottom-1/2 left-4">6h</div>
           <div className="absolute top-4 left-1/2">12h</div>
           <div className="absolute bottom-1/2 right-4">18h</div>
           <div className="absolute bottom-4 left-1/2">24h</div>
         </div>
-
         {currentTime && (
           <Image
-            src={"pointer.svg"}
+            src={
+              primaryColor === "#FFFFFF"
+                ? "pointer-white.svg"
+                : "pointer-dark.svg"
+            }
             height={16}
             width={16}
             alt="clock-pointer"
             className="absolute origin-center"
-            style={{ ...clockPointerLocationClassNames }}
+            style={{
+              ...clockPointerLocationClassNames,
+            }}
           />
         )}
       </div>
-    </main>
+    </DynamicBackground>
   );
 }
