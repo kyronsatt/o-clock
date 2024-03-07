@@ -1,73 +1,73 @@
 class ClockRender {
-  canvasMiddlePoint: number = 0;
-  circleRadius: number = 0;
-  baseCtx: CanvasRenderingContext2D | null = null;
-  pointerCtx: CanvasRenderingContext2D | null = null;
+  _canvasMiddlePoint: number = 0;
+  _circleRadius: number = 0;
+  _baseCtx: CanvasRenderingContext2D | null = null;
+  _pointerCtx: CanvasRenderingContext2D | null = null;
 
   constructor(
     clockCanvas: HTMLCanvasElement,
     pointerCanvas: HTMLCanvasElement
   ) {
     // CONFIGURE CLOCK CANVAS
-    const baseCtx = clockCanvas.getContext("2d");
-    if (!baseCtx) return;
+    const _baseCtx = clockCanvas.getContext("2d");
+    if (!_baseCtx) return;
 
-    const rescaledClockCanvasContext = this.rescaleCanvasToFitOnScreen(
+    const rescaledClockCanvasContext = this._rescaleCanvasToFitOnScreen(
       clockCanvas,
-      baseCtx
+      _baseCtx
     );
-    const styledClockCanvasContext = this.setContextStyles(
+    const styledClockCanvasContext = this._setContextStyles(
       rescaledClockCanvasContext,
       "#2E2E2E",
       8,
       { color: "black", blur: 3 }
     );
-    this.baseCtx = styledClockCanvasContext;
+    this._baseCtx = styledClockCanvasContext;
 
     const { width } = styledClockCanvasContext.canvas;
-    this.canvasMiddlePoint = width / 2;
+    this._canvasMiddlePoint = width / 2;
 
     const offsetMarginInPixels = 10;
-    this.circleRadius = this.canvasMiddlePoint - offsetMarginInPixels;
+    this._circleRadius = this._canvasMiddlePoint - offsetMarginInPixels;
 
     // CONFIGURE POINTER CANVAS
-    const pointerCtx = pointerCanvas.getContext("2d");
-    if (!pointerCtx) return;
+    const _pointerCtx = pointerCanvas.getContext("2d");
+    if (!_pointerCtx) return;
 
-    const rescaledPointerCanvasContext = this.rescaleCanvasToFitOnScreen(
+    const rescaledPointerCanvasContext = this._rescaleCanvasToFitOnScreen(
       pointerCanvas,
-      pointerCtx
+      _pointerCtx
     );
-    const styledPointerCanvasContext = this.setContextStyles(
+    const styledPointerCanvasContext = this._setContextStyles(
       rescaledPointerCanvasContext,
       "#FFFFFF",
       1,
       { color: "white", blur: 2 }
     );
 
-    this.pointerCtx = styledPointerCanvasContext;
+    this._pointerCtx = styledPointerCanvasContext;
   }
 
   start() {
-    if (this.baseCtx) {
-      this.renderBase(this.baseCtx);
+    if (this._baseCtx) {
+      this._renderBase(this._baseCtx);
     }
   }
 
   updatePointer(time: Date) {
-    if (this.pointerCtx) {
+    if (this._pointerCtx) {
       const dayCompletionPercentage =
-        this.calculateDayCompletionPercentage(time);
-      this.clearCanvas(this.pointerCtx);
-      this.renderClockPointer(this.pointerCtx, dayCompletionPercentage);
+        this._calculateDayCompletionPercentage(time);
+      this._clearCanvas(this._pointerCtx);
+      this._renderClockPointer(this._pointerCtx, dayCompletionPercentage);
     }
   }
 
-  clearCanvas(ctx: CanvasRenderingContext2D) {
+  _clearCanvas(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
-  calculateDayCompletionPercentage(time: Date) {
+  _calculateDayCompletionPercentage(time: Date) {
     const hours = time.getHours();
     const minutes = time.getMinutes();
 
@@ -77,7 +77,7 @@ class ClockRender {
     return dayCompletionPercentage;
   }
 
-  rescaleCanvasToFitOnScreen(
+  _rescaleCanvasToFitOnScreen(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D
   ) {
@@ -91,7 +91,7 @@ class ClockRender {
     return ctx;
   }
 
-  setContextStyles(
+  _setContextStyles(
     ctx: CanvasRenderingContext2D,
     color: string,
     lineWidth: number = 4,
@@ -110,39 +110,39 @@ class ClockRender {
     return ctx;
   }
 
-  renderBase(baseCtx: CanvasRenderingContext2D) {
-    baseCtx.beginPath();
-    baseCtx.arc(
-      this.canvasMiddlePoint,
-      this.canvasMiddlePoint,
-      this.circleRadius,
+  _renderBase(_baseCtx: CanvasRenderingContext2D) {
+    _baseCtx.beginPath();
+    _baseCtx.arc(
+      this._canvasMiddlePoint,
+      this._canvasMiddlePoint,
+      this._circleRadius,
       0,
       2 * Math.PI
     );
-    baseCtx.stroke();
-    baseCtx.closePath();
-    baseCtx.save();
+    _baseCtx.stroke();
+    _baseCtx.closePath();
+    _baseCtx.save();
   }
 
-  renderClockPointer(
-    pointerCtx: CanvasRenderingContext2D,
+  _renderClockPointer(
+    _pointerCtx: CanvasRenderingContext2D,
     dayCompletionPercentage: number
   ) {
     const startAngleInRadians = Math.PI / 2;
     const endAngleInRadians =
       Math.PI * 2 * dayCompletionPercentage + startAngleInRadians;
 
-    pointerCtx.beginPath();
-    pointerCtx.arc(
-      this.canvasMiddlePoint,
-      this.canvasMiddlePoint,
-      this.circleRadius,
+    _pointerCtx.beginPath();
+    _pointerCtx.arc(
+      this._canvasMiddlePoint,
+      this._canvasMiddlePoint,
+      this._circleRadius,
       startAngleInRadians,
       endAngleInRadians
     );
-    pointerCtx.stroke();
-    pointerCtx.closePath();
-    pointerCtx.save();
+    _pointerCtx.stroke();
+    _pointerCtx.closePath();
+    _pointerCtx.save();
   }
 }
 
