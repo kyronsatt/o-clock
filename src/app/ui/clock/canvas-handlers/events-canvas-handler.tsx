@@ -14,9 +14,9 @@ class EventsCanvasHandler extends CanvasHandler {
   constructor(eventsCanvas: HTMLCanvasElement) {
     super();
 
-    this._eventsCtx = this._configure_events_canvas(eventsCanvas);
+    this._eventsCtx = this._configureEventsCanvas(eventsCanvas);
 
-    this._set_general_drawing_references(this._eventsCtx);
+    this._setGeneralDrawingReferences(this._eventsCtx);
   }
 
   updateEvents(events: Array<IEvent>) {
@@ -28,7 +28,7 @@ class EventsCanvasHandler extends CanvasHandler {
           calculateTimeAsDailyPercentage(eventStartTimeAsDate);
 
         // 2. PLACE EVENT POINTER ON CLOCK
-        const eventMarkerCoordinates = this._calculate_clock_marker_coordinates(
+        const eventMarkerCoordinates = this._calculateClockMarkerCoordinates(
           eventStartTimeAsDailyPercentage
         );
         this._placeEventMarkerOnClock(
@@ -54,7 +54,7 @@ class EventsCanvasHandler extends CanvasHandler {
     ctx.save();
   }
 
-  _calculate_clock_marker_coordinates(
+  _calculateClockMarkerCoordinates(
     timeAsDailyPercentage: number
   ): ICoordinates {
     const startAngleInRadians = Math.PI / 2;
@@ -71,28 +71,7 @@ class EventsCanvasHandler extends CanvasHandler {
     return { x: xCoordinate, y: yCoordinate };
   }
 
-  _configure_pointer_canvas(
-    pointerCanvas: HTMLCanvasElement
-  ): CanvasRenderingContext2D | null {
-    const _pointerCtx = pointerCanvas.getContext("2d");
-    if (!_pointerCtx) return null;
-
-    const rescaledPointerCanvasContext = this._rescaleCanvasToFitOnScreen(
-      pointerCanvas,
-      _pointerCtx
-    );
-
-    const styledPointerCanvasContext = this._setContextStyles(
-      rescaledPointerCanvasContext,
-      "#6C6C6C",
-      2,
-      { color: "#6C6C6C", blur: 2 }
-    );
-
-    return styledPointerCanvasContext;
-  }
-
-  _configure_events_canvas(
+  _configureEventsCanvas(
     eventsCanvas: HTMLCanvasElement
   ): CanvasRenderingContext2D | null {
     const _baseCtx = eventsCanvas.getContext("2d");

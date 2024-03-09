@@ -39,7 +39,7 @@ class CanvasHandler {
     return ctx;
   }
 
-  _set_general_drawing_references(ctx: CanvasRenderingContext2D | null) {
+  _setGeneralDrawingReferences(ctx: CanvasRenderingContext2D | null) {
     if (ctx) {
       const { width } = ctx.canvas;
       this._canvasMiddlePoint = width / 2;

@@ -12,10 +12,10 @@ class ClockCanvasHandler extends CanvasHandler {
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
     super();
 
-    this._baseCtx = this._configure_base_canvas(baseCanvas);
-    this._pointerCtx = this._configure_pointer_canvas(pointerCanvas);
+    this._baseCtx = this._configureBaseCanvas(baseCanvas);
+    this._pointerCtx = this._configurePointerCanvas(pointerCanvas);
 
-    this._set_general_drawing_references(this._baseCtx);
+    this._setGeneralDrawingReferences(this._baseCtx);
   }
 
   render() {
@@ -33,7 +33,7 @@ class ClockCanvasHandler extends CanvasHandler {
     }
   }
 
-  _configure_base_canvas(
+  _configureBaseCanvas(
     baseCanvas: HTMLCanvasElement
   ): CanvasRenderingContext2D | null {
     const _baseCtx = baseCanvas.getContext("2d");
@@ -55,7 +55,7 @@ class ClockCanvasHandler extends CanvasHandler {
     return styledBaseCanvasContext;
   }
 
-  _configure_pointer_canvas(
+  _configurePointerCanvas(
     pointerCanvas: HTMLCanvasElement
   ): CanvasRenderingContext2D | null {
     const _pointerCtx = pointerCanvas.getContext("2d");
