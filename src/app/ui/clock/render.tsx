@@ -4,6 +4,7 @@ class ClockRender {
 
   _canvasMiddlePoint: number = 0;
   _circleRadius: number = 0;
+  _circleThickness: number = 0;
 
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
     this._baseCtx = this._configure_base_canvas(baseCanvas);
@@ -14,6 +15,7 @@ class ClockRender {
   start() {
     if (this._baseCtx) {
       this._renderBase(this._baseCtx);
+      this._renderTimeTicks(this._baseCtx);
     }
   }
 
@@ -32,18 +34,20 @@ class ClockRender {
     const _baseCtx = baseCanvas.getContext("2d");
     if (!_baseCtx) return null;
 
-    const rescaledClockCanvasContext = this._rescaleCanvasToFitOnScreen(
+    const rescaledBaseCanvasContext = this._rescaleCanvasToFitOnScreen(
       baseCanvas,
       _baseCtx
     );
-    const styledClockCanvasContext = this._setContextStyles(
-      rescaledClockCanvasContext,
-      "#2E2E2E",
-      8,
-      { color: "black", blur: 3 }
+
+    this._circleThickness = 10;
+    const styledBaseCanvasContext = this._setContextStyles(
+      rescaledBaseCanvasContext,
+      "#FFFFFF",
+      this._circleThickness,
+      { color: "white", blur: 4 }
     );
 
-    return styledClockCanvasContext;
+    return styledBaseCanvasContext;
   }
 
   _configure_general_drawing_references() {
@@ -68,59 +72,12 @@ class ClockRender {
     );
     const styledPointerCanvasContext = this._setContextStyles(
       rescaledPointerCanvasContext,
-      "#FFFFFF",
-      1,
-      { color: "white", blur: 2 }
+      "#525252",
+      2,
+      { color: "black", blur: 2 }
     );
 
     return styledPointerCanvasContext;
-  }
-
-  _clearCanvas(ctx: CanvasRenderingContext2D) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
-
-  _calculateDayCompletionPercentage(time: Date) {
-    const hours = time.getHours();
-    const minutes = time.getMinutes();
-
-    const totalMinutes = hours * 60 + minutes;
-    const dayCompletionPercentage = totalMinutes / 1440;
-
-    return dayCompletionPercentage;
-  }
-
-  _rescaleCanvasToFitOnScreen(
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
-  ) {
-    const screenHeight = window.innerHeight - 200;
-    const scale = screenHeight / canvas.height;
-
-    canvas.width *= scale;
-    canvas.height = screenHeight;
-
-    ctx.scale(scale, scale);
-    return ctx;
-  }
-
-  _setContextStyles(
-    ctx: CanvasRenderingContext2D,
-    color: string,
-    lineWidth: number = 4,
-    shadow?: { color: string; blur: number }
-  ) {
-    ctx.imageSmoothingEnabled = true;
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-
-    if (shadow) {
-      ctx.shadowColor = shadow.color;
-      ctx.shadowBlur = shadow.blur;
-    }
-    return ctx;
   }
 
   _renderBase(ctx: CanvasRenderingContext2D) {
@@ -135,23 +92,42 @@ class ClockRender {
     ctx.stroke();
     ctx.closePath();
     ctx.save();
-
-    this._renderBaseTimesLabels(ctx);
   }
 
-  _renderBaseTimesLabels(ctx: CanvasRenderingContext2D) {
-    const circleDiameter = this._circleRadius * 2;
+  _renderTimeTicks(ctx: CanvasRenderingContext2D) {
+    const canvasSide = ctx.canvas.width;
+    const tickMargin = 10;
+    const innerCircleToCanvasOffset =
+      this._canvasMiddlePoint -
+      this._circleRadius +
+      this._circleThickness / 2 +
+      tickMargin;
 
     ctx.beginPath();
+    ctx.fillStyle = "#FFFFFF90";
 
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#2E2E2E80";
-    ctx.font = "bold 10px Arial";
+    // 6AM
+    ctx.fillRect(innerCircleToCanvasOffset, this._canvasMiddlePoint, 8, 1);
 
-    ctx.fillText("6h", 25, this._circleRadius + 10);
-    ctx.fillText("12h", this._circleRadius, 30);
-    ctx.fillText("18h", circleDiameter - 25, this._circleRadius + 10);
-    ctx.fillText("0h", this._circleRadius, circleDiameter - 5);
+    // 12AM
+    ctx.fillRect(this._canvasMiddlePoint, innerCircleToCanvasOffset, 1, 8);
+
+    // 6PM
+    ctx.fillRect(
+      canvasSide - innerCircleToCanvasOffset - tickMargin,
+      this._canvasMiddlePoint,
+      8,
+      1
+    );
+
+    // 12PM
+    ctx.fillRect(
+      this._circleRadius,
+      canvasSide - innerCircleToCanvasOffset - tickMargin,
+      1,
+      8
+    );
+
     ctx.closePath();
     ctx.save();
   }
@@ -175,6 +151,67 @@ class ClockRender {
     ctx.stroke();
     ctx.closePath();
     ctx.save();
+
+    // const endPointX =
+    //   this._canvasMiddlePoint +
+    //   this._circleRadius * Math.cos(endAngleInRadians);
+    // const endPointY =
+    //   this._canvasMiddlePoint +
+    //   this._circleRadius * Math.sin(endAngleInRadians);
+
+    // ctx.beginPath();
+
+    // ctx.arc(endPointX, endPointY, 3, 0, 2 * Math.PI); // Assuming you want a circle with radius 5px at the end of the arc
+    // ctx.fill();
+    // ctx.closePath();
+    // ctx.save();
+  }
+
+  _clearCanvas(ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
+
+  _calculateDayCompletionPercentage(time: Date) {
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+
+    const totalMinutes = hours * 60 + minutes;
+    const dayCompletionPercentage = totalMinutes / 1440;
+
+    return dayCompletionPercentage;
+  }
+
+  _rescaleCanvasToFitOnScreen(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
+    const screenHeight = window.innerHeight - 200;
+    const scale = screenHeight / canvas.height;
+
+    canvas.width = screenHeight;
+    canvas.height = screenHeight;
+
+    ctx.scale(scale, scale);
+    return ctx;
+  }
+
+  _setContextStyles(
+    ctx: CanvasRenderingContext2D,
+    color: string,
+    lineWidth: number = 4,
+    shadow?: { color: string; blur: number }
+  ) {
+    ctx.imageSmoothingEnabled = true;
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+
+    if (shadow) {
+      ctx.shadowColor = shadow.color;
+      ctx.shadowBlur = shadow.blur;
+    }
+    return ctx;
   }
 }
 
