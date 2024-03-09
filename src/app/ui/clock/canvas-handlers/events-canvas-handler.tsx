@@ -2,6 +2,7 @@ import CanvasHandler from "../../general/canvas-handler";
 import { CLOCK_DARK_COLOR_HEX } from "./constants";
 
 import { calculateTimeAsDailyPercentage } from "./helper";
+import { ICoordinates } from "./types";
 
 class EventsCanvasHandler extends CanvasHandler {
   _eventsCtx: CanvasRenderingContext2D | null = null;
@@ -27,9 +28,12 @@ class EventsCanvasHandler extends CanvasHandler {
           calculateTimeAsDailyPercentage(eventStartTimeAsDate);
 
         // 2. PLACE EVENT POINTER ON CLOCK
-        this._placeEventPointerOnClock(
-          this._eventsCtx as CanvasRenderingContext2D,
+        const eventMarkerCoordinates = this._calculate_clock_marker_coordinates(
           eventStartTimeAsDailyPercentage
+        );
+        this._placeEventMarkerOnClock(
+          this._eventsCtx as CanvasRenderingContext2D,
+          eventMarkerCoordinates
         );
 
         // 3. RENDER THE EVENT DATA
@@ -37,22 +41,22 @@ class EventsCanvasHandler extends CanvasHandler {
     }
   }
 
-  _placeEventPointerOnClock(
+  _placeEventMarkerOnClock(
     ctx: CanvasRenderingContext2D,
-    timeAsDailyPercentage: number
+    coordinates: ICoordinates
   ) {
     const pointerRadius = 2.5;
-    const { xCoordinate, yCoordinate } =
-      this._calculate_clock_marker_coordinates(timeAsDailyPercentage);
 
     ctx.beginPath();
-    ctx.arc(xCoordinate, yCoordinate, pointerRadius, 0, 2 * Math.PI);
+    ctx.arc(coordinates.x, coordinates.y, pointerRadius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
     ctx.save();
   }
 
-  _calculate_clock_marker_coordinates(timeAsDailyPercentage: number) {
+  _calculate_clock_marker_coordinates(
+    timeAsDailyPercentage: number
+  ): ICoordinates {
     const startAngleInRadians = Math.PI / 2;
     const endAngleInRadians =
       Math.PI * 2 * timeAsDailyPercentage + startAngleInRadians;
@@ -64,7 +68,7 @@ class EventsCanvasHandler extends CanvasHandler {
       this._canvasMiddlePoint +
       this._circleRadius * Math.sin(endAngleInRadians);
 
-    return { xCoordinate, yCoordinate };
+    return { x: xCoordinate, y: yCoordinate };
   }
 
   _configure_pointer_canvas(
