@@ -1,13 +1,11 @@
 import CanvasHandler from "../../general/canvas-handler";
 
-import { calculateDayCompletionPercentage } from "../helper";
+import { calculateTimeAsDailyPercentage } from "./helper";
 
 class ClockCanvasHandler extends CanvasHandler {
   _baseCtx: CanvasRenderingContext2D | null = null;
   _pointerCtx: CanvasRenderingContext2D | null = null;
 
-  _canvasMiddlePoint: number = 0;
-  _circleRadius: number = 0;
   _circleThickness: number = 0;
 
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
@@ -15,7 +13,7 @@ class ClockCanvasHandler extends CanvasHandler {
 
     this._baseCtx = this._configure_base_canvas(baseCanvas);
     this._pointerCtx = this._configure_pointer_canvas(pointerCanvas);
-    this._configure_general_drawing_references();
+    this._set_general_drawing_references(this._baseCtx);
   }
 
   render() {
@@ -27,9 +25,9 @@ class ClockCanvasHandler extends CanvasHandler {
 
   updatePointer(time: Date) {
     if (this._pointerCtx) {
-      const dayCompletionPercentage = calculateDayCompletionPercentage(time);
+      const timeAsDailyPercentage = calculateTimeAsDailyPercentage(time);
       this._clearCanvas(this._pointerCtx);
-      this._renderClockPointer(this._pointerCtx, dayCompletionPercentage);
+      this._renderClockPointer(this._pointerCtx, timeAsDailyPercentage);
     }
   }
 
@@ -53,16 +51,6 @@ class ClockCanvasHandler extends CanvasHandler {
     );
 
     return styledBaseCanvasContext;
-  }
-
-  _configure_general_drawing_references() {
-    if (this._baseCtx) {
-      const { width } = this._baseCtx.canvas;
-      this._canvasMiddlePoint = width / 2;
-
-      const offsetMarginInPixels = 10;
-      this._circleRadius = this._canvasMiddlePoint - offsetMarginInPixels;
-    }
   }
 
   _configure_pointer_canvas(
@@ -140,11 +128,11 @@ class ClockCanvasHandler extends CanvasHandler {
 
   _renderClockPointer(
     ctx: CanvasRenderingContext2D,
-    dayCompletionPercentage: number
+    timeAsDailyPercentage: number
   ) {
     const startAngleInRadians = Math.PI / 2;
     const endAngleInRadians =
-      Math.PI * 2 * dayCompletionPercentage + startAngleInRadians;
+      Math.PI * 2 * timeAsDailyPercentage + startAngleInRadians;
 
     ctx.beginPath();
     ctx.arc(
@@ -157,20 +145,6 @@ class ClockCanvasHandler extends CanvasHandler {
     ctx.stroke();
     ctx.closePath();
     ctx.save();
-
-    // const endPointX =
-    //   this._canvasMiddlePoint +
-    //   this._circleRadius * Math.cos(endAngleInRadians);
-    // const endPointY =
-    //   this._canvasMiddlePoint +
-    //   this._circleRadius * Math.sin(endAngleInRadians);
-
-    // ctx.beginPath();
-
-    // ctx.arc(endPointX, endPointY, 3, 0, 2 * Math.PI); // Assuming you want a circle with radius 5px at the end of the arc
-    // ctx.fill();
-    // ctx.closePath();
-    // ctx.save();
   }
 }
 

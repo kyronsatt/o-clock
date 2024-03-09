@@ -1,4 +1,7 @@
 class CanvasHandler {
+  _canvasMiddlePoint: number = 0;
+  _circleRadius: number = 0;
+
   _clearCanvas(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
@@ -34,6 +37,16 @@ class CanvasHandler {
       ctx.shadowBlur = shadow.blur;
     }
     return ctx;
+  }
+
+  _set_general_drawing_references(ctx: CanvasRenderingContext2D | null) {
+    if (ctx) {
+      const { width } = ctx.canvas;
+      this._canvasMiddlePoint = width / 2;
+
+      const offsetMarginInPixels = 10;
+      this._circleRadius = this._canvasMiddlePoint - offsetMarginInPixels;
+    }
   }
 }
 
