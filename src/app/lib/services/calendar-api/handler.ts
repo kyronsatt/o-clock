@@ -1,6 +1,6 @@
 import { getEventsMock } from "./mock";
 
-export async function getTodayEvents(): Promise<IGetEventsListResponse> {
+export function getTodayEvents(): IGetEventsListResponse {
     // TODO -> INTEGRATE WITH CALENDAR API
     return getEventsMock
 }

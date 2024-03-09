@@ -1,0 +1,2 @@
+export const CLOCK_DARK_COLOR_HEX = "#6C6C6C"
+export const CLOCK_LIGHT_COLOR_HEX = "#FFFFFF"

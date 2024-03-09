@@ -1,4 +1,5 @@
 import CanvasHandler from "../../general/canvas-handler";
+import { CLOCK_DARK_COLOR_HEX } from "./constants";
 
 import { calculateTimeAsDailyPercentage } from "./helper";
 
@@ -9,12 +10,15 @@ class EventsCanvasHandler extends CanvasHandler {
   _circleRadius: number = 0;
   _circleThickness: number = 0;
 
-  constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
+  constructor(eventsCanvas: HTMLCanvasElement) {
     super();
-    // this._set_general_drawing_references();
+
+    this._eventsCtx = this._configure_events_canvas(eventsCanvas);
+
+    this._set_general_drawing_references(this._eventsCtx);
   }
 
-  render(events: Array<IEvent>) {
+  updateEvents(events: Array<IEvent>) {
     if (this._eventsCtx) {
       events.forEach((event) => {
         // 1. GET POSITION PERCENTAGE BY TIME
@@ -37,7 +41,7 @@ class EventsCanvasHandler extends CanvasHandler {
     ctx: CanvasRenderingContext2D,
     timeAsDailyPercentage: number
   ) {
-    const pointerRadius = 3;
+    const pointerRadius = 2.5;
     const { xCoordinate, yCoordinate } =
       this._calculate_clock_marker_coordinates(timeAsDailyPercentage);
 
@@ -82,6 +86,27 @@ class EventsCanvasHandler extends CanvasHandler {
     );
 
     return styledPointerCanvasContext;
+  }
+
+  _configure_events_canvas(
+    eventsCanvas: HTMLCanvasElement
+  ): CanvasRenderingContext2D | null {
+    const _baseCtx = eventsCanvas.getContext("2d");
+    if (!_baseCtx) return null;
+
+    const rescaledEventsCanvasContext = this._rescaleCanvasToFitOnScreen(
+      eventsCanvas,
+      _baseCtx
+    );
+
+    const styledEventsCanvasContext = this._setContextStyles(
+      rescaledEventsCanvasContext,
+      CLOCK_DARK_COLOR_HEX,
+      undefined,
+      { color: CLOCK_DARK_COLOR_HEX, blur: 4 }
+    );
+
+    return styledEventsCanvasContext;
   }
 }
 

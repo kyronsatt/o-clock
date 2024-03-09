@@ -1,5 +1,6 @@
 import CanvasHandler from "../../general/canvas-handler";
 
+import { CLOCK_DARK_COLOR_HEX, CLOCK_LIGHT_COLOR_HEX } from "./constants";
 import { calculateTimeAsDailyPercentage } from "./helper";
 
 class ClockCanvasHandler extends CanvasHandler {
@@ -13,6 +14,7 @@ class ClockCanvasHandler extends CanvasHandler {
 
     this._baseCtx = this._configure_base_canvas(baseCanvas);
     this._pointerCtx = this._configure_pointer_canvas(pointerCanvas);
+
     this._set_general_drawing_references(this._baseCtx);
   }
 
@@ -45,9 +47,9 @@ class ClockCanvasHandler extends CanvasHandler {
     this._circleThickness = 10;
     const styledBaseCanvasContext = this._setContextStyles(
       rescaledBaseCanvasContext,
-      "#FFFFFF",
+      CLOCK_LIGHT_COLOR_HEX,
       this._circleThickness,
-      { color: "white", blur: 4 }
+      { color: CLOCK_LIGHT_COLOR_HEX, blur: 4 }
     );
 
     return styledBaseCanvasContext;
@@ -66,9 +68,9 @@ class ClockCanvasHandler extends CanvasHandler {
 
     const styledPointerCanvasContext = this._setContextStyles(
       rescaledPointerCanvasContext,
-      "#6C6C6C",
+      CLOCK_DARK_COLOR_HEX,
       2,
-      { color: "#6C6C6C", blur: 2 }
+      { color: CLOCK_DARK_COLOR_HEX, blur: 2 }
     );
 
     return styledPointerCanvasContext;

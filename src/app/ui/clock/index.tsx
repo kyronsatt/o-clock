@@ -2,8 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import ClockCanvasHandler from "./canvas-handlers/clock-canvas-handler";
+import { getTodayEvents } from "@/app/lib/services/calendar-api/handler";
+
 import ClockContent from "./content";
+
+import ClockCanvasHandler from "./canvas-handlers/clock-canvas-handler";
+import EventsCanvasHandler from "./canvas-handlers/events-canvas-handler";
 
 interface IClock {
   time: Date;
@@ -11,26 +15,55 @@ interface IClock {
 export default function Clock({ time }: IClock) {
   const baseCanvasRef = useRef<HTMLCanvasElement>(null);
   const pointerCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [clockRender, setClockCanvasHandler] = useState<ClockCanvasHandler>();
+  const eventsCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  const [clockCanvasHandler, setClockCanvasHandler] =
+    useState<ClockCanvasHandler>();
+  const [eventsCanvasHandler, setEventsCanvasHandler] =
+    useState<EventsCanvasHandler>();
+
+  const renderClockCanvas = () => {
     const baseCanvas = baseCanvasRef.current;
     if (!baseCanvas) return;
 
     const pointerCanvas = pointerCanvasRef.current;
     if (!pointerCanvas) return;
 
-    const clockRender = new ClockCanvasHandler(baseCanvas, pointerCanvas);
-    clockRender.render();
+    const clockCanvasHandler = new ClockCanvasHandler(
+      baseCanvas,
+      pointerCanvas
+    );
+    clockCanvasHandler.render();
 
-    setClockCanvasHandler(clockRender);
+    setClockCanvasHandler(clockCanvasHandler);
+  };
+
+  const renderEventsCanvas = () => {
+    const eventsCanvas = eventsCanvasRef.current;
+    if (!eventsCanvas) return;
+
+    const eventsCanvasHandler = new EventsCanvasHandler(eventsCanvas);
+
+    setEventsCanvasHandler(eventsCanvasHandler);
+  };
+
+  useEffect(() => {
+    renderClockCanvas();
+    renderEventsCanvas();
   }, []);
 
   useEffect(() => {
-    if (clockRender) {
-      clockRender.updatePointer(time);
+    if (clockCanvasHandler) {
+      clockCanvasHandler.updatePointer(time);
     }
   }, [time]);
+
+  const getEventsResponse = getTodayEvents(); // TODO -> INTEGRATE IT
+  useEffect(() => {
+    if (eventsCanvasHandler && getEventsResponse) {
+      eventsCanvasHandler.updateEvents(getEventsResponse.items);
+    }
+  }, [eventsCanvasHandler, getEventsResponse]);
 
   return (
     <div className="flex relative w-full h-full justify-center align-center items-center">
@@ -45,6 +78,13 @@ export default function Clock({ time }: IClock) {
         key={"pointer-canvas"}
         className="absolute z-10"
         ref={pointerCanvasRef}
+        width={2000}
+        height={2000}
+      ></canvas>
+      <canvas
+        key={"events-canvas"}
+        className="absolute z-20"
+        ref={eventsCanvasRef}
         width={2000}
         height={2000}
       ></canvas>
