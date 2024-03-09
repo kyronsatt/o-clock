@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Lexend } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import "./globals.css";
 
-const lexendFont = Lexend({ subsets: ["latin"] });
+const quicksandFont = Quicksand({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={lexendFont.className}>{children}</body>
+      <body className={quicksandFont.className}>{children}</body>
     </html>
   );
 }
