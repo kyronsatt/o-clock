@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import DynamicBackground from "./ui/dynamic-background";
 import Clock from "./ui/clock";
 
