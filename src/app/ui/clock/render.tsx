@@ -70,11 +70,12 @@ class ClockRender {
       pointerCanvas,
       _pointerCtx
     );
+
     const styledPointerCanvasContext = this._setContextStyles(
       rescaledPointerCanvasContext,
-      "#525252",
+      "#6C6C6C",
       2,
-      { color: "black", blur: 2 }
+      { color: "#6C6C6C", blur: 2 }
     );
 
     return styledPointerCanvasContext;
@@ -122,7 +123,7 @@ class ClockRender {
 
     // 12PM
     ctx.fillRect(
-      this._circleRadius,
+      this._canvasMiddlePoint,
       canvasSide - innerCircleToCanvasOffset - tickMargin,
       1,
       8
@@ -185,7 +186,7 @@ class ClockRender {
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D
   ) {
-    const screenHeight = window.innerHeight - 200;
+    const screenHeight = window.innerHeight - 230;
     const scale = screenHeight / canvas.height;
 
     canvas.width = screenHeight;
