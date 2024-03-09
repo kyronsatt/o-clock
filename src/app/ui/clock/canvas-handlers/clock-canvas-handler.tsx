@@ -1,4 +1,8 @@
-class ClockRender {
+import CanvasHandler from "../../general/canvas-handler";
+
+import { calculateDayCompletionPercentage } from "../helper";
+
+class ClockCanvasHandler extends CanvasHandler {
   _baseCtx: CanvasRenderingContext2D | null = null;
   _pointerCtx: CanvasRenderingContext2D | null = null;
 
@@ -7,12 +11,14 @@ class ClockRender {
   _circleThickness: number = 0;
 
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
+    super();
+
     this._baseCtx = this._configure_base_canvas(baseCanvas);
     this._pointerCtx = this._configure_pointer_canvas(pointerCanvas);
     this._configure_general_drawing_references();
   }
 
-  start() {
+  render() {
     if (this._baseCtx) {
       this._renderBase(this._baseCtx);
       this._renderTimeTicks(this._baseCtx);
@@ -21,8 +27,7 @@ class ClockRender {
 
   updatePointer(time: Date) {
     if (this._pointerCtx) {
-      const dayCompletionPercentage =
-        this._calculateDayCompletionPercentage(time);
+      const dayCompletionPercentage = calculateDayCompletionPercentage(time);
       this._clearCanvas(this._pointerCtx);
       this._renderClockPointer(this._pointerCtx, dayCompletionPercentage);
     }
@@ -167,53 +172,6 @@ class ClockRender {
     // ctx.closePath();
     // ctx.save();
   }
-
-  _clearCanvas(ctx: CanvasRenderingContext2D) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
-
-  _calculateDayCompletionPercentage(time: Date) {
-    const hours = time.getHours();
-    const minutes = time.getMinutes();
-
-    const totalMinutes = hours * 60 + minutes;
-    const dayCompletionPercentage = totalMinutes / 1440;
-
-    return dayCompletionPercentage;
-  }
-
-  _rescaleCanvasToFitOnScreen(
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
-  ) {
-    const screenHeight = window.innerHeight - 230;
-    const scale = screenHeight / canvas.height;
-
-    canvas.width = screenHeight;
-    canvas.height = screenHeight;
-
-    ctx.scale(scale, scale);
-    return ctx;
-  }
-
-  _setContextStyles(
-    ctx: CanvasRenderingContext2D,
-    color: string,
-    lineWidth: number = 4,
-    shadow?: { color: string; blur: number }
-  ) {
-    ctx.imageSmoothingEnabled = true;
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-
-    if (shadow) {
-      ctx.shadowColor = shadow.color;
-      ctx.shadowBlur = shadow.blur;
-    }
-    return ctx;
-  }
 }
 
-export default ClockRender;
+export default ClockCanvasHandler;

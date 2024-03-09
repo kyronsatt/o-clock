@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import ClockRender from "./render";
+import ClockCanvasHandler from "./canvas-handlers/clock-canvas-handler";
 import ClockContent from "./content";
 
 interface IClock {
@@ -11,7 +11,7 @@ interface IClock {
 export default function Clock({ time }: IClock) {
   const baseCanvasRef = useRef<HTMLCanvasElement>(null);
   const pointerCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [clockRender, setClockRender] = useState<ClockRender>();
+  const [clockRender, setClockCanvasHandler] = useState<ClockCanvasHandler>();
 
   useEffect(() => {
     const baseCanvas = baseCanvasRef.current;
@@ -20,10 +20,10 @@ export default function Clock({ time }: IClock) {
     const pointerCanvas = pointerCanvasRef.current;
     if (!pointerCanvas) return;
 
-    const clockRender = new ClockRender(baseCanvas, pointerCanvas);
-    clockRender.start();
+    const clockRender = new ClockCanvasHandler(baseCanvas, pointerCanvas);
+    clockRender.render();
 
-    setClockRender(clockRender);
+    setClockCanvasHandler(clockRender);
   }, []);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-import HeroIcon, { IHeroIcon } from "../hero-icon";
+import HeroIcon, { IHeroIcon } from "../general/hero-icon";
 
 export interface IMenuButton {
   icon: IHeroIcon["icon"];
