@@ -2,16 +2,12 @@ import CanvasHandler from "../../general/canvas-handler";
 
 import { CLOCK_DARK_COLOR_HEX, CLOCK_LIGHT_COLOR_HEX } from "./constants";
 import { calculateTimeAsDailyPercentage } from "./helper";
-import { ICoordinates } from "./types";
 
 class ClockCanvasHandler extends CanvasHandler {
   _baseCtx: CanvasRenderingContext2D | null = null;
   _pointerCtx: CanvasRenderingContext2D | null = null;
 
   _circleThickness: number = 0;
-  _heightMargin = 230;
-  _canvasScreenCenterCoordinates: ICoordinates | null = null;
-  _offsetMarginInPixels = 10;
 
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
     super();
@@ -19,11 +15,7 @@ class ClockCanvasHandler extends CanvasHandler {
     this._baseCtx = this._configureBaseCanvas(baseCanvas);
     this._pointerCtx = this._configurePointerCanvas(pointerCanvas);
 
-    this._setGeneralDrawingReferences(
-      this._baseCtx,
-      undefined,
-      this._offsetMarginInPixels
-    );
+    this._setGeneralDrawingReferences(this._baseCtx);
   }
 
   render() {
@@ -49,21 +41,8 @@ class ClockCanvasHandler extends CanvasHandler {
 
     const rescaledBaseCanvasContext = this._rescaleCanvasToFitOnScreen(
       baseCanvas,
-      _baseCtx,
-      this._heightMargin,
-      true
+      _baseCtx
     );
-
-    const boundingClientRect = baseCanvas.getBoundingClientRect();
-    const xCoordinateOfCanvasScreenCenter =
-      boundingClientRect.left + boundingClientRect.width / 2;
-    const yCoordinateOfCanvasScreenCenter =
-      boundingClientRect.top + boundingClientRect.height / 2;
-
-    this._canvasScreenCenterCoordinates = {
-      x: xCoordinateOfCanvasScreenCenter,
-      y: yCoordinateOfCanvasScreenCenter,
-    };
 
     this._circleThickness = 10;
     const styledBaseCanvasContext = this._setContextStyles(
@@ -84,9 +63,7 @@ class ClockCanvasHandler extends CanvasHandler {
 
     const rescaledPointerCanvasContext = this._rescaleCanvasToFitOnScreen(
       pointerCanvas,
-      _pointerCtx,
-      this._heightMargin,
-      true
+      _pointerCtx
     );
 
     const styledPointerCanvasContext = this._setContextStyles(
@@ -102,8 +79,8 @@ class ClockCanvasHandler extends CanvasHandler {
   _renderBase(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.arc(
-      this._canvasMiddlePoint,
-      this._canvasMiddlePoint,
+      this._canvasScreenCenterCoordinates.x,
+      this._canvasScreenCenterCoordinates.y,
       this._circleRadius,
       0,
       2 * Math.PI
@@ -114,35 +91,48 @@ class ClockCanvasHandler extends CanvasHandler {
   }
 
   _renderTimeTicks(ctx: CanvasRenderingContext2D) {
-    const canvasSide = ctx.canvas.width;
     const tickMargin = 10;
-    const innerCircleToCanvasOffset =
-      this._canvasMiddlePoint -
-      this._circleRadius +
-      this._circleThickness / 2 +
-      tickMargin;
 
     ctx.beginPath();
     ctx.fillStyle = "#FFFFFF90";
 
     // 6AM
-    ctx.fillRect(innerCircleToCanvasOffset, this._canvasMiddlePoint, 8, 1);
-
-    // 12AM
-    ctx.fillRect(this._canvasMiddlePoint, innerCircleToCanvasOffset, 1, 8);
-
-    // 6PM
     ctx.fillRect(
-      canvasSide - innerCircleToCanvasOffset - tickMargin,
-      this._canvasMiddlePoint,
+      this._canvasScreenCenterCoordinates.x -
+        this._circleRadius +
+        this._circleThickness / 2 +
+        tickMargin,
+      this._canvasScreenCenterCoordinates.y,
       8,
       1
     );
 
+    // 6PM
+    ctx.fillRect(
+      this._canvasScreenCenterCoordinates.x +
+        this._circleRadius -
+        this._circleThickness -
+        tickMargin,
+      this._canvasScreenCenterCoordinates.y,
+      8,
+      1
+    );
+
+    // 12AM
+    ctx.fillRect(
+      this._canvasScreenCenterCoordinates.x,
+      this._canvasScreenCenterCoordinates.y - this._circleRadius + tickMargin,
+      1,
+      8
+    );
+
     // 12PM
     ctx.fillRect(
-      this._canvasMiddlePoint,
-      canvasSide - innerCircleToCanvasOffset - tickMargin,
+      this._canvasScreenCenterCoordinates.x,
+      this._canvasScreenCenterCoordinates.y +
+        this._circleRadius -
+        this._circleThickness -
+        tickMargin,
       1,
       8
     );
@@ -161,8 +151,8 @@ class ClockCanvasHandler extends CanvasHandler {
 
     ctx.beginPath();
     ctx.arc(
-      this._canvasMiddlePoint,
-      this._canvasMiddlePoint,
+      this._canvasScreenCenterCoordinates.x,
+      this._canvasScreenCenterCoordinates.y,
       this._circleRadius,
       startAngleInRadians,
       endAngleInRadians

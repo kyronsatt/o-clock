@@ -1,6 +1,9 @@
+import { ICoordinates } from "../clock/canvas-handlers/types";
+
 class CanvasHandler {
-  _canvasMiddlePoint: number = 0;
+  _canvasScreenCenterCoordinates: ICoordinates = { x: 0, y: 0 };
   _circleRadius: number = 0;
+  _offsetMarginInPixels: number = 100;
 
   _clearCanvas(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -8,21 +11,15 @@ class CanvasHandler {
 
   _rescaleCanvasToFitOnScreen(
     canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D,
-    heightOffset?: number,
-    useSquareAspectRatio?: boolean
+    ctx: CanvasRenderingContext2D
   ) {
-    const screenHeight = window.innerHeight - (heightOffset ?? 0);
+    const screenHeight = window.innerHeight;
     const screenWidth = window.innerWidth;
 
     const scale = screenHeight / canvas.height;
 
-    canvas.width = useSquareAspectRatio ? screenHeight : screenWidth;
+    canvas.width = screenWidth;
     canvas.height = screenHeight;
-
-    if (heightOffset) {
-      ctx.scale(scale, scale);
-    }
 
     return ctx;
   }
@@ -46,18 +43,21 @@ class CanvasHandler {
     return ctx;
   }
 
-  _setGeneralDrawingReferences(
-    ctx: CanvasRenderingContext2D | null,
-    manualCanvasMiddlePoint?: number,
-    offsetMarginInPixels?: number
-  ) {
+  _setGeneralDrawingReferences(ctx: CanvasRenderingContext2D | null) {
     if (ctx) {
-      const { width } = ctx.canvas;
-      this._canvasMiddlePoint = width / 2;
+      const boundingClientRect = ctx.canvas.getBoundingClientRect();
+      const xCoordinateOfCanvasScreenCenter =
+        boundingClientRect.left + boundingClientRect.width / 2;
+      const yCoordinateOfCanvasScreenCenter =
+        boundingClientRect.top + boundingClientRect.height / 2;
+
+      this._canvasScreenCenterCoordinates = {
+        x: xCoordinateOfCanvasScreenCenter,
+        y: yCoordinateOfCanvasScreenCenter,
+      };
 
       this._circleRadius =
-        (manualCanvasMiddlePoint ?? this._canvasMiddlePoint) -
-        (offsetMarginInPixels ?? 0);
+        yCoordinateOfCanvasScreenCenter - this._offsetMarginInPixels;
     }
   }
 }

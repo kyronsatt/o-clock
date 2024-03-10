@@ -42,11 +42,7 @@ export default function Clock({ time }: IClock) {
     const eventsCanvas = eventsCanvasRef.current;
     if (!eventsCanvas || !clockCanvasHandler) return;
 
-    const eventsCanvasHandler = new EventsCanvasHandler(
-      eventsCanvas,
-      clockCanvasHandler._circleRadius,
-      clockCanvasHandler._canvasScreenCenterCoordinates
-    );
+    const eventsCanvasHandler = new EventsCanvasHandler(eventsCanvas);
 
     setEventsCanvasHandler(eventsCanvasHandler);
   };

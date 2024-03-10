@@ -6,19 +6,13 @@ import { ICoordinates } from "./types";
 
 class EventsCanvasHandler extends CanvasHandler {
   _eventsCtx: CanvasRenderingContext2D | null = null;
-  _clockCentralCoordinates: ICoordinates | null;
 
-  constructor(
-    eventsCanvas: HTMLCanvasElement,
-    clockRadius: number,
-    clockCentralCoordinates: ICoordinates | null
-  ) {
+  constructor(eventsCanvas: HTMLCanvasElement) {
     super();
 
     this._eventsCtx = this._configureEventsCanvas(eventsCanvas);
-    this._clockCentralCoordinates = clockCentralCoordinates;
 
-    this._setGeneralDrawingReferences(this._eventsCtx, clockRadius, 0);
+    this._setGeneralDrawingReferences(this._eventsCtx);
   }
 
   updateEvents(events: Array<IEvent>) {
@@ -84,12 +78,12 @@ class EventsCanvasHandler extends CanvasHandler {
     const endAngleInRadians =
       Math.PI * 2 * timeAsDailyPercentage + startAngleInRadians;
 
-    if (this._clockCentralCoordinates) {
+    if (this._canvasScreenCenterCoordinates) {
       const xCoordinate =
-        this._clockCentralCoordinates.x +
+        this._canvasScreenCenterCoordinates.x +
         this._circleRadius * Math.cos(endAngleInRadians);
       const yCoordinate =
-        this._clockCentralCoordinates.y +
+        this._canvasScreenCenterCoordinates.y +
         this._circleRadius * Math.sin(endAngleInRadians);
 
       return { x: xCoordinate, y: yCoordinate };
