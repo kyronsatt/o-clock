@@ -7,6 +7,7 @@ import { ICoordinates } from "./types";
 class EventsCanvasHandler extends CanvasHandler {
   _eventsCtx: CanvasRenderingContext2D | null = null;
   _eventLineLength: number = 200;
+  _eventDataVerticalPadding: number = 5;
 
   constructor(eventsCanvas: HTMLCanvasElement) {
     super();
@@ -38,7 +39,8 @@ class EventsCanvasHandler extends CanvasHandler {
         this._placeEventDataOnClock(
           this._eventsCtx as CanvasRenderingContext2D,
           eventMarkerCoordinates,
-          eventStartTimeAsDailyPercentage
+          eventStartTimeAsDate,
+          event.summary
         );
       });
     }
@@ -60,11 +62,12 @@ class EventsCanvasHandler extends CanvasHandler {
   _placeEventDataOnClock(
     ctx: CanvasRenderingContext2D,
     coordinates: ICoordinates,
-    timeAsDailyPercentage: number
+    time: Date,
+    title: string
   ) {
+    const isEventOnFirstHalf = time.getHours() <= 12;
+    const coordinateDirection = isEventOnFirstHalf ? -1 : 1;
     const connectionLineBoundaryCoordinates = (): ICoordinates => {
-      const isEventOnFirstHalf = timeAsDailyPercentage <= 0.5;
-      const coordinateDirection = isEventOnFirstHalf ? -1 : 1;
       const lineBoundaryXCoordinate =
         coordinates.x + this._eventLineLength * coordinateDirection;
 
@@ -73,10 +76,21 @@ class EventsCanvasHandler extends CanvasHandler {
     const lineBoundaryCoordinates = connectionLineBoundaryCoordinates();
 
     ctx.beginPath();
-    ctx.lineWidth = 0.5;
+    ctx.lineWidth = 0.3;
     ctx.moveTo(coordinates.x, coordinates.y);
     ctx.lineTo(lineBoundaryCoordinates.x, lineBoundaryCoordinates.y);
     ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.shadowBlur = 0;
+    // ctx.fillText(
+    //   formatDate(time, "HH:MM"),
+    //   lineBoundaryCoordinates.x + 5 * coordinateDirection,
+    //   lineBoundaryCoordinates.y - this._eventDataVerticalPadding
+    // );
+    // ctx.save();
+
+    // RENDER REACT COMPONENT HERE
   }
 
   _calculateClockMarkerCoordinates(
