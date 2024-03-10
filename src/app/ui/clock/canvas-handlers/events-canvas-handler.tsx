@@ -6,17 +6,19 @@ import { ICoordinates } from "./types";
 
 class EventsCanvasHandler extends CanvasHandler {
   _eventsCtx: CanvasRenderingContext2D | null = null;
+  _clockCentralCoordinates: ICoordinates | null;
 
-  _canvasMiddlePoint: number = 0;
-  _circleRadius: number = 0;
-  _circleThickness: number = 0;
-
-  constructor(eventsCanvas: HTMLCanvasElement) {
+  constructor(
+    eventsCanvas: HTMLCanvasElement,
+    clockRadius: number,
+    clockCentralCoordinates: ICoordinates | null
+  ) {
     super();
 
     this._eventsCtx = this._configureEventsCanvas(eventsCanvas);
+    this._clockCentralCoordinates = clockCentralCoordinates;
 
-    this._setGeneralDrawingReferences(this._eventsCtx);
+    this._setGeneralDrawingReferences(this._eventsCtx, clockRadius, 0);
   }
 
   updateEvents(events: Array<IEvent>) {
@@ -31,12 +33,17 @@ class EventsCanvasHandler extends CanvasHandler {
         const eventMarkerCoordinates = this._calculateClockMarkerCoordinates(
           eventStartTimeAsDailyPercentage
         );
+
         this._placeEventMarkerOnClock(
           this._eventsCtx as CanvasRenderingContext2D,
           eventMarkerCoordinates
         );
 
-        // 3. RENDER THE EVENT DATA
+        // // 3. RENDER THE EVENT DATA
+        // this._placeEventDataOnClock(
+        //   this._eventsCtx as CanvasRenderingContext2D,
+        //   eventMarkerCoordinates
+        // );
       });
     }
   }
@@ -45,13 +52,29 @@ class EventsCanvasHandler extends CanvasHandler {
     ctx: CanvasRenderingContext2D,
     coordinates: ICoordinates
   ) {
-    const pointerRadius = 2.5;
+    const markerRadius = 2.5;
 
     ctx.beginPath();
-    ctx.arc(coordinates.x, coordinates.y, pointerRadius, 0, 2 * Math.PI);
+    ctx.arc(coordinates.x, coordinates.y, markerRadius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
     ctx.save();
+  }
+
+  _placeEventDataOnClock(
+    ctx: CanvasRenderingContext2D,
+    coordinates: ICoordinates
+  ) {
+    const connectionLineBoundaryCoordinates = (): ICoordinates => {
+      return { x: coordinates.x + 200, y: coordinates.y };
+    };
+    const lineBoundaryCoordinates = connectionLineBoundaryCoordinates();
+
+    ctx.beginPath();
+    ctx.lineWidth = 0.5;
+    ctx.moveTo(coordinates.x, coordinates.y);
+    ctx.lineTo(lineBoundaryCoordinates.x, lineBoundaryCoordinates.y);
+    ctx.stroke();
   }
 
   _calculateClockMarkerCoordinates(
@@ -61,25 +84,29 @@ class EventsCanvasHandler extends CanvasHandler {
     const endAngleInRadians =
       Math.PI * 2 * timeAsDailyPercentage + startAngleInRadians;
 
-    const xCoordinate =
-      this._canvasMiddlePoint +
-      this._circleRadius * Math.cos(endAngleInRadians);
-    const yCoordinate =
-      this._canvasMiddlePoint +
-      this._circleRadius * Math.sin(endAngleInRadians);
+    if (this._clockCentralCoordinates) {
+      const xCoordinate =
+        this._clockCentralCoordinates.x +
+        this._circleRadius * Math.cos(endAngleInRadians);
+      const yCoordinate =
+        this._clockCentralCoordinates.y +
+        this._circleRadius * Math.sin(endAngleInRadians);
 
-    return { x: xCoordinate, y: yCoordinate };
+      return { x: xCoordinate, y: yCoordinate };
+    }
+
+    return { x: 0, y: 0 };
   }
 
   _configureEventsCanvas(
     eventsCanvas: HTMLCanvasElement
   ): CanvasRenderingContext2D | null {
-    const _baseCtx = eventsCanvas.getContext("2d");
-    if (!_baseCtx) return null;
+    const _eventsCtx = eventsCanvas.getContext("2d");
+    if (!_eventsCtx) return null;
 
     const rescaledEventsCanvasContext = this._rescaleCanvasToFitOnScreen(
       eventsCanvas,
-      _baseCtx
+      _eventsCtx
     );
 
     const styledEventsCanvasContext = this._setContextStyles(

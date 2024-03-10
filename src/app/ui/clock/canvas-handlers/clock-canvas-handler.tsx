@@ -2,12 +2,16 @@ import CanvasHandler from "../../general/canvas-handler";
 
 import { CLOCK_DARK_COLOR_HEX, CLOCK_LIGHT_COLOR_HEX } from "./constants";
 import { calculateTimeAsDailyPercentage } from "./helper";
+import { ICoordinates } from "./types";
 
 class ClockCanvasHandler extends CanvasHandler {
   _baseCtx: CanvasRenderingContext2D | null = null;
   _pointerCtx: CanvasRenderingContext2D | null = null;
 
   _circleThickness: number = 0;
+  _heightMargin = 230;
+  _canvasScreenCenterCoordinates: ICoordinates | null = null;
+  _offsetMarginInPixels = 10;
 
   constructor(baseCanvas: HTMLCanvasElement, pointerCanvas: HTMLCanvasElement) {
     super();
@@ -15,7 +19,11 @@ class ClockCanvasHandler extends CanvasHandler {
     this._baseCtx = this._configureBaseCanvas(baseCanvas);
     this._pointerCtx = this._configurePointerCanvas(pointerCanvas);
 
-    this._setGeneralDrawingReferences(this._baseCtx);
+    this._setGeneralDrawingReferences(
+      this._baseCtx,
+      undefined,
+      this._offsetMarginInPixels
+    );
   }
 
   render() {
@@ -41,8 +49,21 @@ class ClockCanvasHandler extends CanvasHandler {
 
     const rescaledBaseCanvasContext = this._rescaleCanvasToFitOnScreen(
       baseCanvas,
-      _baseCtx
+      _baseCtx,
+      this._heightMargin,
+      true
     );
+
+    const boundingClientRect = baseCanvas.getBoundingClientRect();
+    const xCoordinateOfCanvasScreenCenter =
+      boundingClientRect.left + boundingClientRect.width / 2;
+    const yCoordinateOfCanvasScreenCenter =
+      boundingClientRect.top + boundingClientRect.height / 2;
+
+    this._canvasScreenCenterCoordinates = {
+      x: xCoordinateOfCanvasScreenCenter,
+      y: yCoordinateOfCanvasScreenCenter,
+    };
 
     this._circleThickness = 10;
     const styledBaseCanvasContext = this._setContextStyles(
@@ -63,7 +84,9 @@ class ClockCanvasHandler extends CanvasHandler {
 
     const rescaledPointerCanvasContext = this._rescaleCanvasToFitOnScreen(
       pointerCanvas,
-      _pointerCtx
+      _pointerCtx,
+      this._heightMargin,
+      true
     );
 
     const styledPointerCanvasContext = this._setContextStyles(

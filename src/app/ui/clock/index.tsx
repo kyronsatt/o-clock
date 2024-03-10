@@ -40,17 +40,24 @@ export default function Clock({ time }: IClock) {
 
   const renderEventsCanvas = () => {
     const eventsCanvas = eventsCanvasRef.current;
-    if (!eventsCanvas) return;
+    if (!eventsCanvas || !clockCanvasHandler) return;
 
-    const eventsCanvasHandler = new EventsCanvasHandler(eventsCanvas);
+    const eventsCanvasHandler = new EventsCanvasHandler(
+      eventsCanvas,
+      clockCanvasHandler._circleRadius,
+      clockCanvasHandler._canvasScreenCenterCoordinates
+    );
 
     setEventsCanvasHandler(eventsCanvasHandler);
   };
 
   useEffect(() => {
     renderClockCanvas();
-    renderEventsCanvas();
   }, []);
+
+  useEffect(() => {
+    renderEventsCanvas();
+  }, [clockCanvasHandler]);
 
   useEffect(() => {
     if (clockCanvasHandler) {

@@ -8,15 +8,22 @@ class CanvasHandler {
 
   _rescaleCanvasToFitOnScreen(
     canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
+    ctx: CanvasRenderingContext2D,
+    heightOffset?: number,
+    useSquareAspectRatio?: boolean
   ) {
-    const screenHeight = window.innerHeight - 230;
+    const screenHeight = window.innerHeight - (heightOffset ?? 0);
+    const screenWidth = window.innerWidth;
+
     const scale = screenHeight / canvas.height;
 
-    canvas.width = screenHeight;
+    canvas.width = useSquareAspectRatio ? screenHeight : screenWidth;
     canvas.height = screenHeight;
 
-    ctx.scale(scale, scale);
+    if (heightOffset) {
+      ctx.scale(scale, scale);
+    }
+
     return ctx;
   }
 
@@ -39,13 +46,18 @@ class CanvasHandler {
     return ctx;
   }
 
-  _setGeneralDrawingReferences(ctx: CanvasRenderingContext2D | null) {
+  _setGeneralDrawingReferences(
+    ctx: CanvasRenderingContext2D | null,
+    manualCanvasMiddlePoint?: number,
+    offsetMarginInPixels?: number
+  ) {
     if (ctx) {
       const { width } = ctx.canvas;
       this._canvasMiddlePoint = width / 2;
 
-      const offsetMarginInPixels = 10;
-      this._circleRadius = this._canvasMiddlePoint - offsetMarginInPixels;
+      this._circleRadius =
+        (manualCanvasMiddlePoint ?? this._canvasMiddlePoint) -
+        (offsetMarginInPixels ?? 0);
     }
   }
 }
