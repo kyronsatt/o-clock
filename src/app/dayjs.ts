@@ -8,7 +8,7 @@ export const $dayjs = dayjs;
 
 export const parseStringToDate = (str: string): Date => dayjs(str).toDate();
 
-export const formatDate = (date: Dayjs, template = 'DD MMM YYYY') => date.locale(ptbr).format(template);
+export const formatDate = (date: Date, template = 'DD MMM YYYY') => dayjs(date).locale(ptbr).format(template);
 
 export const formatDateFromString = (dateStr: string, inputFormat: string, outputFormat = 'DD/MM/YYYY, HH:mm') =>
   dayjs(dateStr, inputFormat, 'pt-br').format(outputFormat);

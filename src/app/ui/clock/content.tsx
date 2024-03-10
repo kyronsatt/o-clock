@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDate } from "@/app/dayjs";
+
 import Menu from "../menu";
 
 interface IClockContent {
@@ -17,8 +19,8 @@ export default function ClockContent({ time }: IClockContent) {
           <div className="text-xl w-full font-medium text-center">
             {time?.toLocaleTimeString()}
           </div>
-          <div className="text-xs w-full text-center font-extralight">
-            {time?.toLocaleDateString()}
+          <div className="text-[11px] w-full text-center font-extralight">
+            {formatDate(time, "ddd, D MMM").toUpperCase()}
           </div>
         </div>
         <Menu />
