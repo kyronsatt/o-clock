@@ -6,6 +6,7 @@ import { ICoordinates } from "./types";
 
 class EventsCanvasHandler extends CanvasHandler {
   _eventsCtx: CanvasRenderingContext2D | null = null;
+  _eventLineLength: number = 200;
 
   constructor(eventsCanvas: HTMLCanvasElement) {
     super();
@@ -34,10 +35,11 @@ class EventsCanvasHandler extends CanvasHandler {
         );
 
         // // 3. RENDER THE EVENT DATA
-        // this._placeEventDataOnClock(
-        //   this._eventsCtx as CanvasRenderingContext2D,
-        //   eventMarkerCoordinates
-        // );
+        this._placeEventDataOnClock(
+          this._eventsCtx as CanvasRenderingContext2D,
+          eventMarkerCoordinates,
+          eventStartTimeAsDailyPercentage
+        );
       });
     }
   }
@@ -57,10 +59,16 @@ class EventsCanvasHandler extends CanvasHandler {
 
   _placeEventDataOnClock(
     ctx: CanvasRenderingContext2D,
-    coordinates: ICoordinates
+    coordinates: ICoordinates,
+    timeAsDailyPercentage: number
   ) {
     const connectionLineBoundaryCoordinates = (): ICoordinates => {
-      return { x: coordinates.x + 200, y: coordinates.y };
+      const isEventOnFirstHalf = timeAsDailyPercentage <= 0.5;
+      const coordinateDirection = isEventOnFirstHalf ? -1 : 1;
+      const lineBoundaryXCoordinate =
+        coordinates.x + this._eventLineLength * coordinateDirection;
+
+      return { x: lineBoundaryXCoordinate, y: coordinates.y };
     };
     const lineBoundaryCoordinates = connectionLineBoundaryCoordinates();
 
