@@ -17,7 +17,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        "dark": "#2E2E2E"
+        "dark": "#3D3D3D"
       }
     },
     textShadow: {

@@ -75,18 +75,18 @@ export default function Events({ eventsToRender }: IEvents) {
             key={`event-render-${event.id}`}
             className={twMerge(
               "relative tracking-wide",
-              `border-t-[1px] border-soft-dark`
+              `border-t-[1px] border-dark`
             )}
             style={getPosition(coordinates)}
           >
             <div className="text-xs" style={getLabelPosition(coordinates)}>
               <div
-                className="rounded-xl font-bold bg-white text-soft-dark py-[1px]"
+                className="rounded-xl font-bold bg-white text-dark py-[1px]"
                 style={getEventTimeStyle(coordinates)}
               >
                 {formatDateFromString(event.start.dateTime, undefined, "HH:MM")}
               </div>
-              <div className="rounded-xl font-medium truncate bg-soft-dark text-white px-3 py-[1px] z-[200]">
+              <div className="rounded-xl font-medium truncate bg-dark text-white px-3 py-[1px] z-[200]">
                 {event.summary}
               </div>
             </div>
