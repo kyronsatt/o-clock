@@ -3,16 +3,17 @@
 import { CSSProperties } from "react";
 import { twMerge } from "tailwind-merge";
 
+import { formatDateFromString } from "@/app/dayjs";
+
 import { ICoordinates } from "./canvas-handlers/types";
 import { IEventRender } from ".";
-import { CLOCK_DARK_COLOR_HEX } from "./canvas-handlers/constants";
-import { formatDate, formatDateFromString } from "@/app/dayjs";
 
 interface IEvents {
   eventsToRender?: Array<IEventRender>;
 }
 
 export default function Events({ eventsToRender }: IEvents) {
+  const distanceFromClockCircle = "17rem";
   const isCoordinateOnTheLeft = (coordinates: ICoordinates) =>
     coordinates.x <= innerWidth / 2;
   const getPosition = (coordinates: ICoordinates): CSSProperties => {
@@ -22,7 +23,7 @@ export default function Events({ eventsToRender }: IEvents) {
       position: "absolute",
       textAlign: "right",
       display: "flex",
-      width: "15rem",
+      width: distanceFromClockCircle,
     };
 
     if (isCoordinateOnTheLeft(coordinates)) {
@@ -79,12 +80,15 @@ export default function Events({ eventsToRender }: IEvents) {
             )}
             style={getPosition(coordinates)}
           >
-            <div className="text-xs" style={getLabelPosition(coordinates)}>
+            <div
+              className="text-xs rounded-xl max-w-[15rem] shadow-lg shadow-dark/20"
+              style={getLabelPosition(coordinates)}
+            >
               <div
-                className="rounded-xl font-bold bg-white text-dark py-[1px]"
+                className="rounded-xl font-bold bg-white text-dark py-[1px] "
                 style={getEventTimeStyle(coordinates)}
               >
-                {formatDateFromString(event.start.dateTime, undefined, "HH:MM")}
+                {formatDateFromString(event.start.dateTime, undefined, "HH:mm")}
               </div>
               <div className="rounded-xl font-medium truncate bg-dark text-white px-3 py-[1px] z-[200]">
                 {event.summary}
