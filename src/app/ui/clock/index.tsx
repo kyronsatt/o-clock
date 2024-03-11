@@ -29,6 +29,7 @@ export default function Clock({ time }: IClock) {
   const [eventsCanvasHandler, setEventsCanvasHandler] =
     useState<EventsCanvasHandler>();
   const [eventsToRender, setEventsToRender] = useState<Array<IEventRender>>();
+  const [events, setEvents] = useState<Array<IEvent>>();
 
   const renderClockCanvas = () => {
     const baseCanvas = baseCanvasRef.current;
@@ -48,20 +49,28 @@ export default function Clock({ time }: IClock) {
 
   const renderEventsCanvas = () => {
     const eventsCanvas = eventsCanvasRef.current;
-    if (!eventsCanvas || !clockCanvasHandler) return;
+    if (!eventsCanvas) return;
 
     const eventsCanvasHandler = new EventsCanvasHandler(eventsCanvas);
 
     setEventsCanvasHandler(eventsCanvasHandler);
   };
 
-  useEffect(() => {
-    renderClockCanvas();
-  }, []);
+  async function getEvents() {
+    const calendarId = process.env.NEXT_PUBLIC_CALENDAR_ID;
+    if (calendarId) {
+      const getTodayEventsResponse = await getTodayEvents(calendarId);
+
+      const events = getTodayEventsResponse.items;
+      events && setEvents(events);
+    }
+  }
 
   useEffect(() => {
+    renderClockCanvas();
     renderEventsCanvas();
-  }, [clockCanvasHandler, renderEventsCanvas]);
+    getEvents();
+  }, []);
 
   useEffect(() => {
     if (clockCanvasHandler) {
@@ -73,15 +82,11 @@ export default function Clock({ time }: IClock) {
     setEventsToRender(eventsToRender);
   };
 
-  const getEventsResponse = getTodayEvents(); // TODO -> INTEGRATE IT
   useEffect(() => {
-    if (eventsCanvasHandler && getEventsResponse) {
-      eventsCanvasHandler.updateEvents(
-        getEventsResponse.items,
-        onRenderEventMarker
-      );
+    if (events && eventsCanvasHandler) {
+      eventsCanvasHandler.updateEvents(events, onRenderEventMarker);
     }
-  }, [eventsCanvasHandler, getEventsResponse]);
+  }, [events]);
 
   return (
     <div className="flex relative w-full h-full justify-center align-center items-center">
