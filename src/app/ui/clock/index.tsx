@@ -61,13 +61,13 @@ export default function Clock({ time }: IClock) {
 
   useEffect(() => {
     renderEventsCanvas();
-  }, [clockCanvasHandler]);
+  }, [clockCanvasHandler, renderEventsCanvas]);
 
   useEffect(() => {
     if (clockCanvasHandler) {
       clockCanvasHandler.updatePointer(time);
     }
-  }, [time]);
+  }, [time, clockCanvasHandler]);
 
   const onRenderEventMarker = (eventsToRender: Array<IEventRender>) => {
     setEventsToRender(eventsToRender);
