@@ -1,11 +1,11 @@
 .morning-radial-gradient {
-  background: radial-gradient(circle at 50% 0%, #75ff83 -50%, #2fc9c9, #001336);
+  background: radial-gradient(circle at 50% 0%, #75ff83 -50%, #2fc9c9, #0041bb);
 }
 
 .afternoon-radial-gradient {
-  background: radial-gradient(circle at 50% 0%, #fdc856 -50%, #ff5411, #631400);
+  background: radial-gradient(circle at 50% 0%, #fdc856 -50%, #ff5411, #c02600);
 }
 
 .night-radial-gradient {
-  background: radial-gradient(circle at 50% 0%, #ef44e1 -50%, #a616f9, #1f0031);
+  background: radial-gradient(circle at 50% 0%, #ef44e1 -50%, #a616f9, #540085);
 }
