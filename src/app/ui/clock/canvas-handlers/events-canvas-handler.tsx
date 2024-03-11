@@ -38,11 +38,9 @@ class EventsCanvasHandler extends CanvasHandler {
         );
 
         this._placeEventDataOnClock(
-          // TODO -> REVIEW ITS DESIGN
           this._eventsCtx as CanvasRenderingContext2D,
           eventMarkerCoordinates,
-          eventStartTimeAsDate,
-          event.summary
+          eventStartTimeAsDate
         );
 
         return { event, coordinates: eventMarkerCoordinates };
@@ -68,8 +66,7 @@ class EventsCanvasHandler extends CanvasHandler {
   _placeEventDataOnClock(
     ctx: CanvasRenderingContext2D,
     coordinates: ICoordinates,
-    time: Date,
-    title: string
+    time: Date
   ) {
     const isEventOnFirstHalf = time.getHours() <= 12;
     const coordinateDirection = isEventOnFirstHalf ? -1 : 1;
@@ -83,6 +80,7 @@ class EventsCanvasHandler extends CanvasHandler {
 
     ctx.beginPath();
     ctx.lineWidth = 0.3;
+    ctx.shadowBlur = 0;
     ctx.moveTo(coordinates.x, coordinates.y);
     ctx.lineTo(lineBoundaryCoordinates.x, lineBoundaryCoordinates.y);
     ctx.stroke();
