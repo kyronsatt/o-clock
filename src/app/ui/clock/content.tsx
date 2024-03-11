@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDate } from "@/app/dayjs";
+
 import Menu from "../menu";
 
 interface IClockContent {
@@ -8,7 +10,7 @@ interface IClockContent {
 
 export default function ClockContent({ time }: IClockContent) {
   return (
-    <div className="absolute z-10 pt-24">
+    <div className="absolute z-50 pt-24">
       <div className="flex flex-col justify-center align-middle self-center text-center w-full text-white">
         <div className="text-6xl font-thin tracking-widest text-shadow-xl shadow-[#FFFFFF60]">
           O'Clock
@@ -17,8 +19,8 @@ export default function ClockContent({ time }: IClockContent) {
           <div className="text-xl w-full font-medium text-center">
             {time?.toLocaleTimeString()}
           </div>
-          <div className="text-xs w-full text-center font-extralight">
-            {time?.toLocaleDateString()}
+          <div className="text-[11px] w-full text-center font-extralight capitalize">
+            {formatDate(time, "ddd, D MMM")}
           </div>
         </div>
         <Menu />

@@ -133,7 +133,7 @@ export const getEventsMock: IGetEventsListResponse = {
        "self": true
       },
       "start": {
-       "dateTime": "2024-03-05T20:00:00-03:00",
+       "dateTime": "2024-03-05T22:00:00-03:00",
        "timeZone": "America/Bahia"
       },
       "end": {
@@ -168,7 +168,7 @@ export const getEventsMock: IGetEventsListResponse = {
        "self": true
       },
       "start": {
-       "dateTime": "2024-03-09T07:00:00-03:00",
+       "dateTime": "2024-03-09T08:00:00-03:00",
        "timeZone": "America/Sao_Paulo"
       },
       "end": {
