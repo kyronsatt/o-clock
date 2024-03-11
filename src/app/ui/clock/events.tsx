@@ -90,7 +90,7 @@ export default function Events({ eventsToRender }: IEvents) {
               >
                 {formatDateFromString(event.start.dateTime, undefined, "HH:mm")}
               </div>
-              <div className="rounded-xl font-medium truncate bg-dark text-white px-3 py-[1px] z-[200]">
+              <div className="rounded-xl font-normal truncate bg-dark text-white px-3 py-[1px] z-[200]">
                 {event.summary}
               </div>
             </div>
