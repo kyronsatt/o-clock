@@ -8,9 +8,16 @@ import ClockContent from "./content";
 
 import ClockCanvasHandler from "./canvas-handlers/clock-canvas-handler";
 import EventsCanvasHandler from "./canvas-handlers/events-canvas-handler";
+import { ICoordinates } from "./canvas-handlers/types";
+import Events from "./events";
 
 interface IClock {
   time: Date;
+}
+
+export interface IEventRender {
+  event: IEvent;
+  coordinates: ICoordinates;
 }
 export default function Clock({ time }: IClock) {
   const baseCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -21,6 +28,7 @@ export default function Clock({ time }: IClock) {
     useState<ClockCanvasHandler>();
   const [eventsCanvasHandler, setEventsCanvasHandler] =
     useState<EventsCanvasHandler>();
+  const [eventsToRender, setEventsToRender] = useState<Array<IEventRender>>();
 
   const renderClockCanvas = () => {
     const baseCanvas = baseCanvasRef.current;
@@ -61,10 +69,17 @@ export default function Clock({ time }: IClock) {
     }
   }, [time]);
 
+  const onRenderEventMarker = (eventsToRender: Array<IEventRender>) => {
+    setEventsToRender(eventsToRender);
+  };
+
   const getEventsResponse = getTodayEvents(); // TODO -> INTEGRATE IT
   useEffect(() => {
     if (eventsCanvasHandler && getEventsResponse) {
-      eventsCanvasHandler.updateEvents(getEventsResponse.items);
+      eventsCanvasHandler.updateEvents(
+        getEventsResponse.items,
+        onRenderEventMarker
+      );
     }
   }, [eventsCanvasHandler, getEventsResponse]);
 
@@ -92,6 +107,7 @@ export default function Clock({ time }: IClock) {
         height={2000}
       ></canvas>
       <ClockContent time={time} />
+      <Events eventsToRender={eventsToRender} />
     </div>
   );
 }

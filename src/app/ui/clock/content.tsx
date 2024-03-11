@@ -19,8 +19,8 @@ export default function ClockContent({ time }: IClockContent) {
           <div className="text-xl w-full font-medium text-center">
             {time?.toLocaleTimeString()}
           </div>
-          <div className="text-[11px] w-full text-center font-extralight">
-            {formatDate(time, "ddd, D MMM").toUpperCase()}
+          <div className="text-[11px] w-full text-center font-extralight capitalize">
+            {formatDate(time, "ddd, D MMM")}
           </div>
         </div>
         <Menu />

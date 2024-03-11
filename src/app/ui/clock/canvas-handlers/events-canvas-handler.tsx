@@ -1,6 +1,7 @@
 import CanvasHandler from "../../general/canvas-handler";
-import { CLOCK_DARK_COLOR_HEX } from "./constants";
+import { IEventRender } from "..";
 
+import { CLOCK_DARK_COLOR_HEX } from "./constants";
 import { calculateTimeAsDailyPercentage } from "./helper";
 import { ICoordinates } from "./types";
 
@@ -17,15 +18,16 @@ class EventsCanvasHandler extends CanvasHandler {
     this._setGeneralDrawingReferences(this._eventsCtx);
   }
 
-  updateEvents(events: Array<IEvent>) {
+  updateEvents(
+    events: Array<IEvent>,
+    onRenderEventMarker: (eventsToRender: Array<IEventRender>) => void
+  ) {
     if (this._eventsCtx) {
-      events.forEach((event) => {
-        // 1. GET POSITION PERCENTAGE BY TIME
+      const eventsToRender = events.map((event): IEventRender => {
         const eventStartTimeAsDate = new Date(event.start.dateTime);
         const eventStartTimeAsDailyPercentage =
           calculateTimeAsDailyPercentage(eventStartTimeAsDate);
 
-        // 2. PLACE EVENT POINTER ON CLOCK
         const eventMarkerCoordinates = this._calculateClockMarkerCoordinates(
           eventStartTimeAsDailyPercentage
         );
@@ -35,14 +37,18 @@ class EventsCanvasHandler extends CanvasHandler {
           eventMarkerCoordinates
         );
 
-        // // 3. RENDER THE EVENT DATA
         this._placeEventDataOnClock(
+          // TODO -> REVIEW ITS DESIGN
           this._eventsCtx as CanvasRenderingContext2D,
           eventMarkerCoordinates,
           eventStartTimeAsDate,
           event.summary
         );
+
+        return { event, coordinates: eventMarkerCoordinates };
       });
+
+      onRenderEventMarker(eventsToRender);
     }
   }
 
@@ -80,17 +86,6 @@ class EventsCanvasHandler extends CanvasHandler {
     ctx.moveTo(coordinates.x, coordinates.y);
     ctx.lineTo(lineBoundaryCoordinates.x, lineBoundaryCoordinates.y);
     ctx.stroke();
-
-    // ctx.beginPath();
-    // ctx.shadowBlur = 0;
-    // ctx.fillText(
-    //   formatDate(time, "HH:MM"),
-    //   lineBoundaryCoordinates.x + 5 * coordinateDirection,
-    //   lineBoundaryCoordinates.y - this._eventDataVerticalPadding
-    // );
-    // ctx.save();
-
-    // RENDER REACT COMPONENT HERE
   }
 
   _calculateClockMarkerCoordinates(
