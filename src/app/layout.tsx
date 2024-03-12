@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 
+import AuthProvider from "./context/auth-provider";
+
 import "./globals.css";
 
 const quicksandFont = Quicksand({ subsets: ["latin"] });
@@ -17,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt">
-      <body className={quicksandFont.className}>{children}</body>
+      <body className={quicksandFont.className}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

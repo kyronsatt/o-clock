@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import MenuButton, { IMenuButton } from "./button";
 
 interface IMenu {}
@@ -6,7 +7,9 @@ export default function Menu({}: IMenu) {
   const onCreateEventButtonClick = () => {};
   const onAccountButtonClick = () => {};
   const onCalendarButtonClick = () => {};
-  const onSettingsButtonClick = () => {};
+  const onSettingsButtonClick = () => {
+    signOut();
+  };
 
   const buttonsIndexer: Array<IMenuButton> = [
     {
