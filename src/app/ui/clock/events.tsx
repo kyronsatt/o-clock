@@ -88,7 +88,7 @@ export default function Events({ eventsToRender }: IEvents) {
                 className="rounded-xl font-bold bg-white text-dark py-[1px] "
                 style={getEventTimeStyle(coordinates)}
               >
-                {formatDateFromString(event.start.dateTime, undefined, "HH:mm")}
+                {formatDateFromString(event.start.dateTime, "HH:mm")}
               </div>
               <div className="rounded-xl font-normal truncate bg-dark text-white px-3 py-[1px] z-[200]">
                 {event.summary}
