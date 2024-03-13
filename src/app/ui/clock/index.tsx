@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { getTodayEvents } from "@/app/lib/services/calendar-api/handler";
-
 import ClockContent from "./content";
 
 import ClockCanvasHandler from "./canvas-handlers/clock-canvas-handler";
@@ -59,7 +57,7 @@ export default function Clock({ time }: IClock) {
   async function getEvents() {
     const calendarId = process.env.NEXT_PUBLIC_CALENDAR_ID;
     if (calendarId) {
-      getTodayEvents()
+      fetch("/api/calendar/get-events")
         .then((res) => res.json())
         .then((events) => {
           events && setEvents(events);
