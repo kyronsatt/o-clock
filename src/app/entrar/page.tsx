@@ -12,7 +12,7 @@ export default function LoginPage() {
         </div>
         <button
           className="flex items-center justify-between gap-2 mt-6 px-4 py-2 rounded-3xl bg-gradient-to-r from-[#FF3D3D] to-[#FF862E] font-light text-white"
-          onClick={() => signIn("google")}
+          onClick={() => signIn("google", { callbackUrl: "/" })}
         >
           <Image
             src={"/google-logo.png"}
