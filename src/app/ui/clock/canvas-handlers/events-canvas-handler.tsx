@@ -37,13 +37,13 @@ class EventsCanvasHandler extends CanvasHandler {
           eventMarkerCoordinates
         );
 
-        this._placeEventDataOnClock(
+        const coordinates = this._placeEventConnectionsOnClock(
           this._eventsCtx as CanvasRenderingContext2D,
           eventMarkerCoordinates,
           eventStartTimeAsDate
         );
 
-        return { event, coordinates: eventMarkerCoordinates };
+        return { event, coordinates };
       });
 
       onRenderEventMarker(eventsToRender);
@@ -63,7 +63,7 @@ class EventsCanvasHandler extends CanvasHandler {
     ctx.save();
   }
 
-  _placeEventDataOnClock(
+  _placeEventConnectionsOnClock(
     ctx: CanvasRenderingContext2D,
     coordinates: ICoordinates,
     time: Date
@@ -76,14 +76,19 @@ class EventsCanvasHandler extends CanvasHandler {
 
       return { x: lineBoundaryXCoordinate, y: coordinates.y };
     };
-    const lineBoundaryCoordinates = connectionLineBoundaryCoordinates();
+    const connectionBoundaryCoordinates = connectionLineBoundaryCoordinates();
 
     ctx.beginPath();
     ctx.lineWidth = 0.3;
     ctx.shadowBlur = 0;
     ctx.moveTo(coordinates.x, coordinates.y);
-    ctx.lineTo(lineBoundaryCoordinates.x, lineBoundaryCoordinates.y);
+    ctx.lineTo(
+      connectionBoundaryCoordinates.x,
+      connectionBoundaryCoordinates.y
+    );
     ctx.stroke();
+
+    return connectionBoundaryCoordinates;
   }
 
   _calculateClockMarkerCoordinates(

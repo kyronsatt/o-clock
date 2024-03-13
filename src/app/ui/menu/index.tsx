@@ -4,7 +4,6 @@ import EventCreationForm from "../event-creation-form";
 import Settings from "../settings";
 
 import MenuButton, { IMenuButton } from "./button";
-import { redirect } from "next/navigation";
 
 interface IMenu {}
 
