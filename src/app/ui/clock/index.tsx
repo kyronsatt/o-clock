@@ -59,10 +59,11 @@ export default function Clock({ time }: IClock) {
   async function getEvents() {
     const calendarId = process.env.NEXT_PUBLIC_CALENDAR_ID;
     if (calendarId) {
-      const getTodayEventsResponse = await getTodayEvents(calendarId);
-
-      const events = getTodayEventsResponse.items;
-      events && setEvents(events);
+      getTodayEvents()
+        .then((res) => res.json())
+        .then((events) => {
+          events && setEvents(events);
+        });
     }
   }
 
