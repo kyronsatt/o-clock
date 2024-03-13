@@ -68,7 +68,7 @@ export default function EventCreationForm({
               </div>
               <button
                 type="submit"
-                className="w-full px-3 py-2 mt-4 font-normal text-center text-md bg-violet-700 hover:bg-violet-600 hover:ring-2 hover:ring-offset-2 hover:ring-violet-300 transition-all duration-200 text-white rounded-3xl"
+                className="w-full px-3 py-2 mt-4 font-normal text-center text-md bg-violet-700 hover:bg-violet-600 hover:ring-2 hover:ring-offset-2 hover:ring-violet-300 transition-colors duration-200 text-white rounded-3xl"
               >
                 Criar evento
               </button>

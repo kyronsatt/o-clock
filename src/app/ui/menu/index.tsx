@@ -1,7 +1,7 @@
 import React from "react";
-import { signOut } from "next-auth/react";
 
 import EventCreationForm from "../event-creation-form";
+import Settings from "../settings";
 
 import MenuButton, { IMenuButton } from "./button";
 
@@ -10,20 +10,15 @@ interface IMenu {}
 export default function Menu({}: IMenu) {
   const [openEventCreationForm, setOpenEventCreationForm] =
     React.useState<boolean>(false);
+  const [openSettings, setOpenSettings] = React.useState<boolean>(false);
 
-  const onCreateEventButtonClick = () => {
-    setOpenEventCreationForm(true);
-  };
   const onAccountButtonClick = () => {};
   const onCalendarButtonClick = () => {};
-  const onSettingsButtonClick = () => {
-    signOut();
-  };
 
   const buttonsIndexer: Array<IMenuButton> = [
     {
       icon: "PlusCircleIcon",
-      onClick: onCreateEventButtonClick,
+      onClick: () => setOpenEventCreationForm(true),
     },
     {
       icon: "UserCircleIcon",
@@ -35,7 +30,7 @@ export default function Menu({}: IMenu) {
     },
     {
       icon: "CogIcon",
-      onClick: onSettingsButtonClick,
+      onClick: () => setOpenSettings(true),
     },
   ];
 
@@ -48,6 +43,7 @@ export default function Menu({}: IMenu) {
         open={openEventCreationForm}
         setOpen={setOpenEventCreationForm}
       />
+      <Settings open={openSettings} setOpen={setOpenSettings} />
     </div>
   );
 }
