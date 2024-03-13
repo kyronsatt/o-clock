@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 
 import { formatDateFromString } from "@/app/dayjs";
 
+import Loader from "../loader";
+
 import { ICoordinates } from "./canvas-handlers/types";
 import { IEventRender } from ".";
 
@@ -13,9 +15,9 @@ interface IEvents {
 }
 
 export default function Events({ eventsToRender }: IEvents) {
-  const distanceFromClockCircle = "17rem";
   const isCoordinateOnTheLeft = (coordinates: ICoordinates) =>
     coordinates.x <= innerWidth / 2;
+
   const getPosition = (coordinates: ICoordinates): CSSProperties => {
     const positionStyle: CSSProperties = {
       left: Math.round(coordinates.x),
@@ -23,7 +25,7 @@ export default function Events({ eventsToRender }: IEvents) {
       position: "absolute",
       textAlign: "right",
       display: "flex",
-      width: distanceFromClockCircle,
+      width: "4rem",
     };
 
     if (isCoordinateOnTheLeft(coordinates)) {
@@ -40,7 +42,7 @@ export default function Events({ eventsToRender }: IEvents) {
     const positionStyle: CSSProperties = {
       position: "absolute",
       display: "flex",
-      top: "-0.5rem",
+      top: "-0.6rem",
     };
 
     if (!isCoordinateOnTheLeft(coordinates)) {
@@ -71,31 +73,34 @@ export default function Events({ eventsToRender }: IEvents) {
   return (
     <div className="absolute w-screen h-screen z-[200]">
       <div className="relative w-full h-full">
-        {eventsToRender?.map(({ event, coordinates }) => (
-          <div
-            key={`event-render-${event.id}`}
-            className={twMerge(
-              "relative tracking-wide",
-              `border-t-[1px] border-dark`
-            )}
-            style={getPosition(coordinates)}
-          >
+        {eventsToRender ? (
+          eventsToRender.map(({ event, coordinates }) => (
             <div
-              className="text-xs rounded-xl max-w-[15rem] shadow-lg shadow-dark/20"
-              style={getLabelPosition(coordinates)}
+              key={`event-render-${event.id}`}
+              className={twMerge("relative tracking-wide")}
+              style={getPosition(coordinates)}
             >
               <div
-                className="rounded-xl font-bold bg-white text-dark py-[1px] "
-                style={getEventTimeStyle(coordinates)}
+                className="text-xs rounded-xl max-w-[15rem] shadow-lg shadow-dark/20"
+                style={getLabelPosition(coordinates)}
               >
-                {formatDateFromString(event.start.dateTime, undefined, "HH:mm")}
-              </div>
-              <div className="rounded-xl font-normal truncate bg-dark text-white px-3 py-[1px] z-[200]">
-                {event.summary}
+                <div
+                  className="rounded-xl font-bold bg-white text-dark py-[1px] "
+                  style={getEventTimeStyle(coordinates)}
+                >
+                  {formatDateFromString(event.start.dateTime, "HH:mm")}
+                </div>
+                <div className="rounded-xl font-normal truncate bg-dark text-white px-3 py-[1px] z-[200]">
+                  {event.summary}
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="absolute bottom-8 left-8 bg-white shadow-xl shadow-black/10 rounded-full pl-3 pr-8 py-3">
+            <Loader message="Obtendo eventos..." className="flex-row gap-4" />
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

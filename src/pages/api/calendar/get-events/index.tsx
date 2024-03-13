@@ -3,7 +3,7 @@ import { google, calendar_v3 } from "googleapis";
 import { GaxiosResponse } from "gaxios";
 import dayjs from "dayjs";
 
-import { getOAuth2Client } from "./oauth2";
+import { getOAuth2Client } from "../oauth2";
 
 export async function getCalendarsList(calendarClient: calendar_v3.Calendar) {
   return await calendarClient.calendarList.list();

@@ -1,14 +1,19 @@
-
 interface IEvent {
   id: string;
   kind: string;
   summary: string;
-  start: IEventStart;
+  start: IEventTime;
   description?: string;
   [x: string]: unknown;
 }
 
 type IEventsList = Array<IEvent>;
+
+interface IEventCreationPayload {
+  summary: string;
+  start: IEventTime;
+  end: IEventTime;
+}
 
 interface IGetEventsListResponse {
   kind: string;
@@ -20,11 +25,10 @@ interface IGetEventsListResponse {
   accessRole: string;
   defaultReminders: Array<any>;
   nextSyncToken: string;
-  items: IEventsList
+  items: IEventsList;
 }
 
-interface IEventStart {
-    dateTime: string;
-    timeZone: string;
-  }
-  
+interface IEventTime {
+  dateTime: string;
+  timeZone: string;
+}

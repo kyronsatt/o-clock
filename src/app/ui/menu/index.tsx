@@ -1,24 +1,26 @@
-import { signOut } from "next-auth/react";
+import React from "react";
+
+import EventCreationForm from "../event-creation-form";
+import Settings from "../settings";
+
 import MenuButton, { IMenuButton } from "./button";
 
 interface IMenu {}
 
 export default function Menu({}: IMenu) {
-  const onCreateEventButtonClick = () => {};
-  const onAccountButtonClick = () => {};
-  const onCalendarButtonClick = () => {};
-  const onSettingsButtonClick = () => {
-    signOut();
+  const [openEventCreationForm, setOpenEventCreationForm] =
+    React.useState<boolean>(false);
+  const [openSettings, setOpenSettings] = React.useState<boolean>(false);
+
+  const onCalendarButtonClick = () => {
+    const googleCalendarUrl = "https://calendar.google.com/calendar";
+    window.open(googleCalendarUrl, "_blank")?.focus();
   };
 
   const buttonsIndexer: Array<IMenuButton> = [
     {
       icon: "PlusCircleIcon",
-      onClick: onCreateEventButtonClick,
-    },
-    {
-      icon: "UserCircleIcon",
-      onClick: onAccountButtonClick,
+      onClick: () => setOpenEventCreationForm(true),
     },
     {
       icon: "CalendarDaysIcon",
@@ -26,7 +28,7 @@ export default function Menu({}: IMenu) {
     },
     {
       icon: "CogIcon",
-      onClick: onSettingsButtonClick,
+      onClick: () => setOpenSettings(true),
     },
   ];
 
@@ -35,6 +37,11 @@ export default function Menu({}: IMenu) {
       {buttonsIndexer.map((buttonProps) => (
         <MenuButton key={`menu-button-${buttonProps.icon}`} {...buttonProps} />
       ))}
+      <EventCreationForm
+        open={openEventCreationForm}
+        setOpen={setOpenEventCreationForm}
+      />
+      <Settings open={openSettings} setOpen={setOpenSettings} />
     </div>
   );
 }
