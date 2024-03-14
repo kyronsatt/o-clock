@@ -1,0 +1,25 @@
+name: Enhancement
+description: Send a bug report
+title: "Use an auto-descriptive title"
+projects: ["kyronsatt/1"]
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this form!
+  - type: textarea
+    id: enhancement-core
+    attributes:
+      label: What is it about?
+      placeholder: Tell us what you do you want to improve! If it includes visual changes, you should add a link to a prototype or a upload a gif or image.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/kyronsatt/o-clock/blob/main/CONTRIBUTING.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

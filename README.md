@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![O'Clock Logo](.github/assets/readme-logo.png)
+_**A minimalist, intuitive and elegant way to manage your daily tasks using a beautifully-designed clock view.**_
 
 ## Getting Started
 
-First, run the development server:
+<a href="https://www.youtube.com/channel/UCslMsMAL4dMtJCIAgQNevDQ" >
+<img src="https://img.shields.io/badge/Watch Me-FFFFFF?style=for-the-badge&logo=youtube&logoColor=red" align="center"/>
+</a>
+<br/>
+<br/>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone this repository
+2. Install the dependencies: `yarn install`
+3. Create an `.env.local` file and fill the environment variables by using the `.env.template`
+4. Start the development server: `yarn dev`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Deployment
 
-## Learn More
+To deploy this app, just connect your repository to a Vercel project or run `yarn build` to build the project and upload it to your preferred host service.
 
-To learn more about Next.js, take a look at the following resources:
+## Built With
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)&nbsp;
+![React.js](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)&nbsp;
+![React.js](https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)&nbsp;
+![React.js](https://img.shields.io/badge/tailwindcss-FFFFFF?style=for-the-badge&logo=tailwindcss&logoColor=blue)&nbsp;
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [Typescript](https://www.typescriptlang.org/) - Main programming language
+- [NextJS](https://nextjs.org/) - The React web framework
+- [Google Calendar API](https://developers.google.com/calendar/api/guides/overview) - API for events and calendars management
+- [TailwindCSS](https://tailwindcss.com/docs/) - CSS Framework
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Versioning
+
+We use [Google Release Please](https://github.com/marketplace/actions/release-please-action) for versioning according to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). For the versions available, see the [tags on this repository](https://github.com/kyronsatt/o-clock/tags).
+
+## Authors
+
+- **Rafael Alexandrino** - _Initial work_ :: [@kyronsatt](https://github.com/kyronsatt)
+
+See also the list of [contributors](https://github.com/kyronsatt/o-clock/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details
