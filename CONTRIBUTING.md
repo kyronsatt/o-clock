@@ -14,21 +14,21 @@ This project has a set of labels that can be described and visualized at [this l
 
 You are free to suggest [enhancement issues](https://github.com/kyronsatt/o-clock/labels/enhancement) (feature addition or improvement), but try to prioritize the [bug issues](https://github.com/kyronsatt/o-clock/labels/bug), that are urgent.
 
-### Enhancement Issues and Backlog
+### Backlog
 
-Aiming to keep the original vision and UX guidelines for the project, if you create an enhancement issue, you should provide a visual representation of it, like a print or prototype of the goal feature. In addition, this type of change should be firstly approved by the code owners before be started.
+Aiming improve the project coordination, when you create an issue, you should add it to the project [**"O'Clock Backlog"**](https://github.com/kyronsatt/o-clock/projects?query=is%3Aopen++O%27Clock+Backlog). This project classifies an issue in 4 stages:
 
-So, if you create a enhancement issue, keep on mind that it should be reviewed by someone before you start your development.
-
-To control this flow, we have a project called [**"O'Clock Backlog"**](https://github.com/kyronsatt/o-clock/projects?query=is%3Aopen++O%27Clock+Backlog), which classify enhancement issues in 4 stages:
-
-- Need approval: issues that need to be reviewd by a code owner (here is where you should put your enhancement suggestion issue).
+- Need approval: issues that need to be reviewd by a code owner (here is where you should put your issue). So, keep on mind that your issue should be reviewed by someone before you start your development, to do not lost your time in an blocked issue.
 - Ready: issues already reviewed and ready to be developed.
 - In progress: issues in development process.
 - In review: issues in review process.
 - Done: issues merged and available in production environment.
 
-_**Remember: all enhancement issues should be added to the "Need review" category of the Backlog project.**_
+### Enhancements Issues
+
+In addition, if you create an enhancement issue, you should provide a visual representation of it, like a print or prototype of the goal feature.
+
+_**Remember: all issues should be added to the "Need approval" category of the Backlog project.**_
 
 ## Pull Request Processs
 
