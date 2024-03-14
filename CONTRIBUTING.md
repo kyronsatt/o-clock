@@ -22,9 +22,10 @@ So, if you create a enhancement issue, keep on mind that it should be reviewed b
 
 To control this flow, we have a project called [**"O'Clock Backlog"**](https://github.com/kyronsatt/o-clock/projects?query=is%3Aopen++O%27Clock+Backlog), which classify enhancement issues in 4 stages:
 
-- Need review: issues that need to be reviewd by a code owner (here is where you should put your enhancement suggestion issue).
+- Need approval: issues that need to be reviewd by a code owner (here is where you should put your enhancement suggestion issue).
 - Ready: issues already reviewed and ready to be developed.
-- In progress: issues in development process (check).
+- In progress: issues in development process.
+- In review: issues in review process.
 - Done: issues merged and available in production environment.
 
 _**Remember: all enhancement issues should be added to the "Need review" category of the Backlog project.**_
