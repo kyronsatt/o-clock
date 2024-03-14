@@ -1,6 +1,8 @@
 name: Bug Report
 description: Send a bug report
-title: "issue: "
+title: "Use an auto-descriptive title"
+projects: ["kyronsatt/1"]
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
@@ -18,7 +20,7 @@ body:
     id: what-happened
     attributes:
       label: Steps to reproduce
-      placeholder: Tell us what you see!
+      placeholder: Tell us what you see! If posible, upload gifs or images to illustrate the problem.
       value: |
         1. Go to '...'
         2. Click on '....'
@@ -26,7 +28,6 @@ body:
         4. See error
     validations:
       required: true
-  // ADD IMAGE UPLOAD
   - type: textarea
     id: what-expect
     attributes:
