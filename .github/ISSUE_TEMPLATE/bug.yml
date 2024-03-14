@@ -1,0 +1,53 @@
+name: Bug Report
+description: Send a bug report
+title: "issue: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: version
+    attributes:
+      label: Version Number
+      description: What's the version number?
+      placeholder: Version number.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Steps to reproduce
+      placeholder: Tell us what you see!
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+  // ADD IMAGE UPLOAD
+  - type: textarea
+    id: what-expect
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Edge
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/kyronsatt/o-clock/blob/main/CONTRIBUTING.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
