@@ -3,7 +3,7 @@ _**A minimalist, intuitive and elegant way to manage your daily tasks using a be
 
 ## Getting Started
 
-<a href="https://www.youtube.com/channel/UCslMsMAL4dMtJCIAgQNevDQ" >
+<a href="https://youtu.be/f6bR4L-tj0c?si=uF5al1Y12FZJ5PiH" >
 <img src="https://img.shields.io/badge/Watch Me-FFFFFF?style=for-the-badge&logo=youtube&logoColor=red" align="center"/>
 </a>
 <br/>
